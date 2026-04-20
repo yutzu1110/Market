@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio Live Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060810;
+  --surface: #0d1120;
+  --surface2: #131826;
+  --border: #1e2538;
+  --border2: #2a3350;
+  --text: #c8d0e8;
+  --muted: #485070;
+  --dim: #2a3350;
+  --tw: #38bdf8;
+  --us: #818cf8;
+  --gain: #34d399;
+  --loss: #fb7185;
+  --warn: #fbbf24;
+  --accent: #e2c97e;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Fira Code', monospace;
+  min-height: 100vh;
+  padding: 0;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(56,189,248,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56,189,248,0.025) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+.container { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 28px 20px 60px; }
+
+/* ── API KEY SETUP ── */
+.setup-panel {
+background: linear-gradient(135deg, rgba(56,189,248,0.06), rgba(129,140,248,0.06));
+border: 1px solid var(–border2);
+border-radius: 14px;
+padding: 24px;
+margin-bottom: 28px;
+animation: fadeUp 0.4s ease both;
+}
+.setup-panel h3 {
+font-family: ‘Syne’, sans-serif;
+font-size: 0.9rem;
+color: var(–accent);
+margin-bottom: 16px;
+display: flex;
+align-items: center;
+gap: 8px;
+}
+.api-fields { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: end; }
+.field-wrap label { font-size: 0.6rem; color: var(–muted); letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 5px; }
+.field-wrap input {
+width: 100%;
+background: var(–surface);
+border: 1px solid var(–border2);
+border-radius: 8px;
+color: var(–text);
+font-family: ‘Fira Code’, monospace;
+font-size: 0.72rem;
+padding: 9px 12px;
+outline: none;
+transition: border-color 0.2s;
+}
+.field-wrap input:focus { border-color: var(–tw); }
+.field-wrap input::placeholder { color: var(–muted); }
+.fetch-btn {
+background: linear-gradient(135deg, rgba(56,189,248,0.2), rgba(129,140,248,0.2));
+border: 1px solid var(–border2);
+color: var(–text);
+font-family: ‘Fira Code’, monospace;
+font-size: 0.72rem;
+padding: 9px 18px;
+border-radius: 8px;
+cursor: pointer;
+transition: all 0.2s;
+white-space: nowrap;
+height: 38px;
+}
+.fetch-btn:hover { border-color: var(–tw); color: var(–tw); }
+.fetch-btn:disabled { opacity: 0.4; pointer-events: none; }
+.api-note { font-size: 0.62rem; color: var(–muted); margin-top: 10px; line-height: 1.6; }
+.api-note a { color: var(–tw); text-decoration: none; }
+.api-note a:hover { text-decoration: underline; }
+.status-line { font-size: 0.65rem; margin-top: 8px; min-height: 18px; }
+.status-ok { color: var(–gain); }
+.status-err { color: var(–loss); }
+.status-loading { color: var(–warn); }
+
+/* ── HEADER ── */
+.header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 28px; flex-wrap: wrap; gap: 12px; }
+.header h1 { font-family: ‘Syne’, sans-serif; font-size: 2rem; font-weight: 800; color: var(–accent); letter-spacing: -1px; line-height: 1; }
+.header p { font-size: 0.62rem; color: var(–muted); margin-top: 5px; letter-spacing: 1.5px; text-transform: uppercase; }
+.refresh-btn {
+background: var(–surface2);
+border: 1px solid var(–border2);
+color: var(–text);
+font-family: ‘Fira Code’, monospace;
+font-size: 0.7rem;
+padding: 8px 16px;
+border-radius: 8px;
+cursor: pointer;
+transition: all 0.2s;
+display: flex; align-items: center; gap: 6px;
+}
+.refresh-btn:hover { border-color: var(–tw); color: var(–tw); }
+.spin { display: inline-block; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+/* ── SUMMARY ── */
+.summary { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 28px; }
+.sum-card { background: var(–surface); border: 1px solid var(–border); border-radius: 10px; padding: 14px 16px; animation: fadeUp 0.4s ease both; }
+.sum-label { font-size: 0.58rem; color: var(–muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+.sum-value { font-size: 1.15rem; font-family: ‘Syne’, sans-serif; font-weight: 700; }
+
+/* ── SECTION ── */
+.section-wrap { margin-bottom: 28px; animation: fadeUp 0.5s ease both; }
+.section-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.section-badge { font-family: ‘Syne’, sans-serif; font-size: 0.68rem; font-weight: 700; padding: 3px 12px; border-radius: 99px; letter-spacing: 1px; }
+.badge-tw { background: rgba(56,189,248,0.1); color: var(–tw); border: 1px solid rgba(56,189,248,0.2); }
+.badge-us { background: rgba(129,140,248,0.1); color: var(–us); border: 1px solid rgba(129,140,248,0.2); }
+.section-meta { font-size: 0.63rem; color: var(–muted); margin-left: auto; }
+
+/* ── TABLE ── */
+.table-wrap { border: 1px solid var(–border); border-radius: 12px; overflow: hidden; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 700px; }
+thead { background: var(–surface2); }
+th { font-size: 0.57rem; color: var(–muted); text-transform: uppercase; letter-spacing: 0.8px; padding: 10px 11px; text-align: right; white-space: nowrap; font-weight: 400; }
+th:first-child { text-align: left; }
+tbody tr { background: var(–surface); border-top: 1px solid var(–border); transition: background 0.15s; cursor: pointer; }
+tbody tr:hover { background: var(–surface2); }
+td { padding: 10px 11px; font-size: 0.72rem; text-align: right; white-space: nowrap; vertical-align: middle; }
+td:first-child { text-align: left; }
+.ticker-name { font-family: ‘Syne’, sans-serif; font-size: 0.8rem; font-weight: 700; }
+.ticker-sub { font-size: 0.57rem; color: var(–muted); margin-top: 2px; }
+.tw-name { color: var(–tw); }
+.us-name { color: var(–us); }
+.gain-val { color: var(–gain); }
+.loss-val { color: var(–loss); }
+.neu-val { color: var(–muted); }
+.pct-badge { display: inline-block; padding: 2px 7px; border-radius: 5px; font-size: 0.66rem; font-weight: 500; }
+.pct-gain { background: rgba(52,211,153,0.1); color: var(–gain); }
+.pct-loss { background: rgba(251,113,133,0.1); color: var(–loss); }
+.price-blink { animation: blink 0.5s ease; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2;color:var(–warn)} }
+.na { color: var(–muted); font-size: 0.62rem; }
+
+/* ── DETAIL ROW ── */
+.detail-row { display: none; }
+.detail-row.open { display: table-row; }
+.detail-row > td {
+background: #090c18;
+padding: 16px 20px;
+text-align: left;
+border-top: 1px dashed var(–dim);
+}
+.detail-grid { display: grid; grid-template-columns: auto 1fr; gap: 20px; }
+.metric-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { background: var(–surface2); border: 1px solid var(–border); border-radius: 8px; padding: 8px 12px; min-width: 90px; }
+.chip-k { font-size: 0.56rem; color: var(–muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 3px; }
+.chip-v { font-size: 0.85rem; font-weight: 600; font-family: ‘Syne’, sans-serif; }
+.chip-v.good { color: var(–gain); }
+.chip-v.bad  { color: var(–loss); }
+.detail-desc h4 { font-family: ‘Syne’, sans-serif; font-size: 0.78rem; color: var(–accent); margin-bottom: 8px; }
+.detail-desc p { font-size: 0.7rem; color: var(–text); line-height: 1.75; opacity: 0.85; }
+.news-list { margin-top: 10px; display: flex; flex-direction: column; gap: 5px; }
+.news-item { font-size: 0.65rem; color: var(–muted); display: flex; gap: 6px; }
+.news-item::before { content: ‘▸’; color: var(–tw); flex-shrink: 0; }
+.news-item a { color: var(–tw); text-decoration: none; }
+.news-item a:hover { text-decoration: underline; }
+.loading-chip { color: var(–muted); font-size: 0.68rem; }
+
+.footer { text-align: center; font-size: 0.62rem; color: var(–muted); margin-top: 32px; }
+.live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(–gain); margin-right: 5px; animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.dot-anim::after { content:’…’; animation: dots 1.2s steps(4,end) infinite; }
+@keyframes dots { 0%,20%{content:’.’} 40%,60%{content:’..’} 80%,100%{content:’…’} }
+
+@media(max-width:768px) {
+.summary { grid-template-columns: repeat(2,1fr); }
+.api-fields { grid-template-columns: 1fr; }
+.detail-grid { grid-template-columns: 1fr; }
+}
+</style>
+
+</head>
+<body>
+<div class="container">
+
+  <!-- API KEY SETUP -->
+
+  <div class="setup-panel">
+    <h3>🔑 輸入 API 金鑰（免費申請，資料直連官方來源）</h3>
+    <div class="api-fields">
+      <div class="field-wrap">
+        <label>Finnhub API Key（美股 + 基本面）</label>
+        <input type="text" id="finnhubKey" placeholder="d1abc2def3... 在 finnhub.io 免費申請" />
+      </div>
+      <div class="field-wrap">
+        <label>FinMind Token（台股官方資料）</label>
+        <input type="text" id="finmindToken" placeholder="eyJ0eXAiOi... 在 finmindtrade.com 免費申請" />
+      </div>
+      <button class="fetch-btn" id="fetchBtn" onclick="loadAll()">▶ 載入即時數據</button>
+    </div>
+    <div class="api-note">
+      📌 <b style="color:var(--text)">美股 EPS / PE / ROE / ROA / 即時報價</b>：
+      <a href="https://finnhub.io" target="_blank">finnhub.io</a> → 免費註冊 → Dashboard 複製 API Key（每分鐘60次）<br>
+      📌 <b style="color:var(--text)">台股即時報價 + 財務報表</b>：
+      <a href="https://finmindtrade.com" target="_blank">finmindtrade.com</a> → 免費註冊 → 個人資料頁複製 Token（每天1000次）<br>
+      🔒 金鑰只儲存在你的瀏覽器記憶體，不會傳送給任何第三方。
+    </div>
+    <div class="status-line" id="statusLine"></div>
+  </div>
+
+  <!-- HEADER -->
+
+  <div class="header">
+    <div>
+      <h1>PORTFOLIO LIVE</h1>
+      <p>Finnhub · FinMind · 即時報價 · 財務基本面</p>
+    </div>
+    <button class="refresh-btn" id="refreshBtn" onclick="loadAll()">
+      <span id="refreshIcon">↻</span> 重新整理
+    </button>
+  </div>
+
+  <!-- SUMMARY -->
+
+  <div class="summary">
+    <div class="sum-card" style="animation-delay:0.05s">
+      <div class="sum-label">總成本 TWD</div>
+      <div class="sum-value" style="color:var(--accent)" id="totalCost">—</div>
+    </div>
+    <div class="sum-card" style="animation-delay:0.1s">
+      <div class="sum-label">總市值 TWD</div>
+      <div class="sum-value" id="totalPV">—</div>
+    </div>
+    <div class="sum-card" style="animation-delay:0.15s">
+      <div class="sum-label">總損益 TWD</div>
+      <div class="sum-value" id="totalPnL">—</div>
+    </div>
+    <div class="sum-card" style="animation-delay:0.2s">
+      <div class="sum-label">整體報酬率</div>
+      <div class="sum-value" id="totalRet">—</div>
+    </div>
+  </div>
+
+  <!-- TW -->
+
+  <div class="section-wrap">
+    <div class="section-head">
+      <span class="section-badge badge-tw">台股 TW — FinMind</span>
+      <span class="section-meta" id="tw-meta"></span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>股票</th><th>股數</th><th>成本均價</th>
+          <th>現價 ↺</th><th>總成本</th><th>現值</th>
+          <th>損益</th><th>報酬率</th>
+          <th>EPS</th><th>P/E</th><th>ROE%</th><th>ROA%</th>
+        </tr></thead>
+        <tbody id="tw-body"><tr><td colspan="12" style="text-align:center;padding:20px;color:var(--muted)">請輸入 API 金鑰後載入</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- US -->
+
+  <div class="section-wrap">
+    <div class="section-head">
+      <span class="section-badge badge-us">美股 US — Finnhub</span>
+      <span class="section-meta" id="us-meta"></span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>股票</th><th>股數</th><th>成本均價 USD</th>
+          <th>現價 USD ↺</th><th>總成本 TWD</th><th>現值 TWD</th>
+          <th>損益 TWD</th><th>報酬率</th>
+          <th>EPS</th><th>P/E</th><th>ROE%</th><th>ROA%</th>
+        </tr></thead>
+        <tbody id="us-body"><tr><td colspan="12" style="text-align:center;padding:20px;color:var(--muted)">請輸入 API 金鑰後載入</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span class="live-dot"></span>
+    點擊任一行展開新聞 &amp; 詳細財務 ·
+    <span id="lastUpdated">尚未更新</span>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+//  你的持股資料（從手寫筆記照實填入）
+// ══════════════════════════════════════════════
+const TW_PORTFOLIO = [
+  { id: '0919', name: '群益台灣精選高息ETF', shares: 4221, avgCost: 22.3,  totalCost: 94181,  isETF: true  },
+  { id: '0881', name: '國泰永續高股息ETF',   shares: 500,  avgCost: 35.6,  totalCost: 17837,  isETF: true  },
+  { id: '2330', name: '台積電',             shares: 20,   avgCost: 1790,  totalCost: 35814,  isETF: false },
+  { id: '3491', name: '昇達科技',           shares: 30,   avgCost: 1608,  totalCost: 48266,  isETF: false },
+  { id: '3363', name: '上詮電子',           shares: 20,   avgCost: 685,   totalCost: 13905,  isETF: false },
+];
+
+const US_PORTFOLIO = [
+  { id: 'GLDM', name: 'SPDR Gold MiniShares', shares: 7,  avgCostUSD: 86.907, totalCostTWD: 19175.8,  isETF: true  },
+  { id: 'GOOG', name: 'Alphabet Inc.',         shares: 2,  avgCostUSD: 282.17, totalCostTWD: 17826.39, isETF: false },
+  { id: 'NVDA', name: 'NVIDIA Corp.',          shares: 4,  avgCostUSD: 182.0,  totalCostTWD: 23055.41, isETF: false },
+  { id: 'TSLA', name: 'Tesla Inc.',            shares: 6,  avgCostUSD: 399.8,  totalCostTWD: 75234.64, isETF: false },
+];
+
+const USD_TWD = 32.5; // 匯率（可手動調整）
+
+// ══════════════════════════════════════════════
+//  State
+// ══════════════════════════════════════════════
+let twPrices = {};
+let usPrices = {};
+let twFunds  = {};
+let usFunds  = {};
+let newsCache = {};
+
+// ══════════════════════════════════════════════
+//  FinMind — 台股即時報價
+// ══════════════════════════════════════════════
+async function fetchTWPrices(token) {
+  const today = new Date();
+  const start = new Date(today); start.setDate(start.getDate() - 5);
+  const fmt = d => d.toISOString().slice(0,10);
+  const ids = TW_PORTFOLIO.map(s => s.id);
+  const results = {};
+  await Promise.all(ids.map(async id => {
+    try {
+      const url = `https://api.finmindtrade.com/api/v4/data?` +
+        `dataset=TaiwanStockPrice&data_id=${id}&start_date=${fmt(start)}&end_date=${fmt(today)}&token=${token}`;
+      const res = await fetch(url);
+      const json = await res.json();
+      if (json.data && json.data.length > 0) {
+        const latest = json.data[json.data.length - 1];
+        results[id] = parseFloat(latest.close);
+      }
+    } catch(e) { console.warn('FinMind price error', id, e); }
+  }));
+  return results;
+}
+
+// ══════════════════════════════════════════════
+//  FinMind — 台股財務指標
+// ══════════════════════════════════════════════
+async function fetchTWFundamentals(token, id) {
+  if (twFunds[id]) return twFunds[id];
+  try {
+    const start = new Date(); start.setFullYear(start.getFullYear() - 2);
+    const fmt = d => d.toISOString().slice(0,10);
+    const url = `https://api.finmindtrade.com/api/v4/data?` +
+      `dataset=TaiwanStockFinancialStatements&data_id=${id}&start_date=${fmt(start)}&token=${token}`;
+    const res = await fetch(url);
+    const json = await res.json();
+    if (!json.data || json.data.length === 0) return null;
+    const d = json.data;
+    const allTypes = [...new Set(d.map(r => r.type))];
+    console.log('FinMind types for', id, allTypes);
+    const find = (...types) => {
+      for (const type of types) {
+        const rows = d.filter(r => r.type === type);
+        if (rows.length) return parseFloat(rows[rows.length - 1].value);
+      }
+      return null;
+    };
+    const result = {
+      eps: find('EPS', 'BasicEPS', 'eps'),
+      roe: find('ROE', 'roe', 'ReturnOnEquity'),
+      roa: find('ROA', 'roa', 'ReturnOnAssets'),
+      pe: null
+    };
+    try {
+      const peUrl = `https://api.finmindtrade.com/api/v4/data?` +
+        `dataset=TaiwanStockPER&data_id=${id}&start_date=${fmt(start)}&token=${token}`;
+      const peRes = await fetch(peUrl);
+      const peJson = await peRes.json();
+      if (peJson.data && peJson.data.length > 0) {
+        result.pe = peJson.data[peJson.data.length - 1].PER;
+      }
+    } catch(e) {}
+    twFunds[id] = result;
+    return result;
+  } catch(e) { return null; }
+}
+
+// ══════════════════════════════════════════════
+//  Finnhub — 美股即時報價
+// ══════════════════════════════════════════════
+async function fetchUSPrices(apiKey) {
+  const results = {};
+  await Promise.all(US_PORTFOLIO.map(async s => {
+    try {
+      const url = `https://finnhub.io/api/v1/quote?symbol=${s.id}&token=${apiKey}`;
+      const res = await fetch(url);
+      const json = await res.json();
+      if (json.c) results[s.id] = json.c;
+    } catch(e) { console.warn('Finnhub price error', s.id, e); }
+  }));
+  return results;
+}
+
+// ══════════════════════════════════════════════
+//  Finnhub — 美股基本面
+// ══════════════════════════════════════════════
+async function fetchUSFundamentals(apiKey, id) {
+  if (usFunds[id]) return usFunds[id];
+  try {
+    const [metricRes, profileRes] = await Promise.all([
+      fetch(`https://finnhub.io/api/v1/stock/metric?symbol=${id}&metric=all&token=${apiKey}`),
+      fetch(`https://finnhub.io/api/v1/stock/profile2?symbol=${id}&token=${apiKey}`)
+    ]);
+    const metric  = await metricRes.json();
+    const profile = await profileRes.json();
+    const m = metric.metric || {};
+    const result = {
+      eps:     m.epsBasicExclExtraItemsTTM || m.epsDilutedTTM || null,
+      pe:      m.peBasicExclExtraTTM || m.peNormalizedAnnual || null,
+      roe:     m.roeTTM != null ? parseFloat(m.roeTTM).toFixed(2) : null,
+      roa:     m.roaTTM != null ? parseFloat(m.roaTTM).toFixed(2) : null,
+      divYield:m.dividendYieldIndicatedAnnual || null,
+      mktCap:  profile.marketCapitalization || null,
+      industry:profile.finnhubIndustry || null,
+      desc:    profile.name || id,
+      country: profile.country || null,
+    };
+    usFunds[id] = result;
+    return result;
+  } catch(e) { return null; }
+}
+
+// ══════════════════════════════════════════════
+//  Finnhub — 美股最新新聞
+// ══════════════════════════════════════════════
+async function fetchUSNews(apiKey, id) {
+  if (newsCache[id]) return newsCache[id];
+  try {
+    const today = new Date();
+    const weekAgo = new Date(today); weekAgo.setDate(weekAgo.getDate() - 7);
+    const fmt = d => d.toISOString().slice(0,10);
+    const url = `https://finnhub.io/api/v1/company-news?symbol=${id}&from=${fmt(weekAgo)}&to=${fmt(today)}&token=${apiKey}`;
+    const res  = await fetch(url);
+    const news = await res.json();
+    const result = (news || []).slice(0, 3).map(n => ({ headline: n.headline, url: n.url }));
+    newsCache[id] = result;
+    return result;
+  } catch(e) { return []; }
+}
+
+// ══════════════════════════════════════════════
+//  Helpers
+// ══════════════════════════════════════════════
+const fmtN = (n, d=0) => n == null ? '—' : Number(n).toLocaleString('zh-TW',{minimumFractionDigits:d,maximumFractionDigits:d});
+const fmtP = (n) => n == null ? '—' : (n>0?'+':'')+Number(n).toFixed(2)+'%';
+const cls  = (n) => n > 0 ? 'gain-val' : n < 0 ? 'loss-val' : 'neu-val';
+const pctBadge = (pct) => `<span class="pct-badge ${pct>=0?'pct-gain':'pct-loss'}">${fmtP(pct)}</span>`;
+const naCell = () => `<span class="na">ETF</span>`;
+const fmtFund = (v, isEtf, suf='') => isEtf ? naCell() : (v != null ? fmtN(v,2)+suf : '<span class="na">—</span>');
+
+// ══════════════════════════════════════════════
+//  Render TW row
+// ══════════════════════════════════════════════
+function renderTW() {
+  const tbody = document.getElementById('tw-body');
+  let rows = '', cost=0, pv=0;
+  TW_PORTFOLIO.forEach(s => {
+    const price = twPrices[s.id];
+    const val   = price != null ? price * s.shares : null;
+    const pnl   = val  != null ? val - s.totalCost  : null;
+    const pct   = pnl  != null ? (pnl/s.totalCost)*100 : null;
+    cost += s.totalCost;
+    if (val) pv += val;
+    const f = twFunds[s.id] || {};
+    rows += `
+      <tr onclick="toggleTWDetail('${s.id}')">
+        <td><div class="ticker-name tw-name">${s.id}</div><div class="ticker-sub">${s.name}</div></td>
+        <td>${fmtN(s.shares)}</td>
+        <td>${fmtN(s.avgCost,1)}</td>
+        <td class="price-live" id="twp-${s.id}">${price!=null?fmtN(price,2):'<span class="na">…</span>'}</td>
+        <td>${fmtN(s.totalCost)}</td>
+        <td>${val!=null?fmtN(val):'…'}</td>
+        <td class="${cls(pnl)}">${pnl!=null?(pnl>0?'+':'')+fmtN(pnl):'…'}</td>
+        <td>${pct!=null?pctBadge(pct):'…'}</td>
+        <td>${fmtFund(f.eps,  s.isETF)}</td>
+        <td>${fmtFund(f.pe,   s.isETF,'x')}</td>
+        <td>${fmtFund(f.roe,  s.isETF,'%')}</td>
+        <td>${fmtFund(f.roa,  s.isETF,'%')}</td>
+      </tr>
+      <tr class="detail-row" id="drow-${s.id}">
+        <td colspan="12"><div id="dcontent-${s.id}"><span class="na">點擊以載入詳細資料</span></div></td>
+      </tr>`;
+  });
+  tbody.innerHTML = rows;
+  const secPnL = pv - cost, secPct = (secPnL/cost)*100;
+  document.getElementById('tw-meta').textContent =
+    `成本 ${fmtN(cost)} ｜ 損益 ${secPnL>0?'+':''}${fmtN(secPnL)} (${fmtP(secPct)})`;
+}
+
+// ══════════════════════════════════════════════
+//  Render US row
+// ══════════════════════════════════════════════
+function renderUS() {
+  const tbody = document.getElementById('us-body');
+  let rows = '', cost=0, pv=0;
+  US_PORTFOLIO.forEach(s => {
+    const price = usPrices[s.id];
+    const val   = price != null ? price * s.shares * USD_TWD : null;
+    const pnl   = val   != null ? val - s.totalCostTWD : null;
+    const pct   = pnl   != null ? (pnl/s.totalCostTWD)*100 : null;
+    cost += s.totalCostTWD;
+    if (val) pv += val;
+    const f = usFunds[s.id] || {};
+    rows += `
+      <tr onclick="toggleUSDetail('${s.id}')">
+        <td><div class="ticker-name us-name">${s.id}</div><div class="ticker-sub">${s.name}</div></td>
+        <td>${s.shares}</td>
+        <td>$${fmtN(s.avgCostUSD,2)}</td>
+        <td class="price-live" id="usp-${s.id}">${price!=null?'$'+fmtN(price,2):'<span class="na">…</span>'}</td>
+        <td>${fmtN(s.totalCostTWD)}</td>
+        <td>${val!=null?fmtN(val):'…'}</td>
+        <td class="${cls(pnl)}">${pnl!=null?(pnl>0?'+':'')+fmtN(pnl):'…'}</td>
+        <td>${pct!=null?pctBadge(pct):'…'}</td>
+        <td>${fmtFund(f.eps,  s.isETF)}</td>
+        <td>${fmtFund(f.pe,   s.isETF,'x')}</td>
+        <td>${fmtFund(f.roe,  s.isETF,'%')}</td>
+        <td>${fmtFund(f.roa,  s.isETF,'%')}</td>
+      </tr>
+      <tr class="detail-row" id="drow-us-${s.id}">
+        <td colspan="12"><div id="dcontent-us-${s.id}"><span class="na">點擊以載入詳細資料</span></div></td>
+      </tr>`;
+  });
+  tbody.innerHTML = rows;
+  const secPnL = pv - cost, secPct = (secPnL/cost)*100;
+  document.getElementById('us-meta').textContent =
+    `成本 ${fmtN(cost)} ｜ 損益 ${secPnL>0?'+':''}${fmtN(secPnL)} (${fmtP(secPct)})`;
+}
+
+// ══════════════════════════════════════════════
+//  Summary bar
+// ══════════════════════════════════════════════
+function updateSummary() {
+  let cost=0, pv=0;
+  TW_PORTFOLIO.forEach(s => { cost+=s.totalCost; if(twPrices[s.id]) pv+=twPrices[s.id]*s.shares; });
+  US_PORTFOLIO.forEach(s => { cost+=s.totalCostTWD; if(usPrices[s.id]) pv+=usPrices[s.id]*s.shares*USD_TWD; });
+  cost+=15000; pv+=17659; // 基金
+  const pnl=(pv-cost), pct=(pnl/cost)*100;
+  document.getElementById('totalCost').textContent = fmtN(cost);
+  document.getElementById('totalPV').textContent   = fmtN(pv);
+  const pnlEl = document.getElementById('totalPnL');
+  pnlEl.textContent = (pnl>0?'+':'')+fmtN(pnl);
+  pnlEl.className = `sum-value ${cls(pnl)}`;
+  const retEl = document.getElementById('totalRet');
+  retEl.textContent = fmtP(pct);
+  retEl.className = `sum-value ${cls(pnl)}`;
+}
+
+// ══════════════════════════════════════════════
+//  Detail expand — TW
+// ══════════════════════════════════════════════
+async function toggleTWDetail(id) {
+  const row = document.getElementById(`drow-${id}`);
+  if (row.classList.contains('open')) { row.classList.remove('open'); return; }
+  row.classList.add('open');
+  const token = document.getElementById('finmindToken').value.trim();
+  if (!token) { document.getElementById(`dcontent-${id}`).innerHTML = '<span class="na">請先輸入 FinMind Token</span>'; return; }
+  const s = TW_PORTFOLIO.find(x => x.id === id);
+  document.getElementById(`dcontent-${id}`).innerHTML = '<span class="loading-chip"><span class="dot-anim">從 FinMind 載入財務數據</span></span>';
+  const fund = await fetchTWFundamentals(token, id);
+  const f = fund || {};
+  renderDetailPanel(`dcontent-${id}`, id, s.name, f, [], s.isETF, false);
+}
+
+// ══════════════════════════════════════════════
+//  Detail expand — US
+// ══════════════════════════════════════════════
+async function toggleUSDetail(id) {
+  const row = document.getElementById(`drow-us-${id}`);
+  if (row.classList.contains('open')) { row.classList.remove('open'); return; }
+  row.classList.add('open');
+  const apiKey = document.getElementById('finnhubKey').value.trim();
+  if (!apiKey) { document.getElementById(`dcontent-us-${id}`).innerHTML = '<span class="na">請先輸入 Finnhub API Key</span>'; return; }
+  const s = US_PORTFOLIO.find(x => x.id === id);
+  document.getElementById(`dcontent-us-${id}`).innerHTML = '<span class="loading-chip"><span class="dot-anim">從 Finnhub 載入基本面數據</span></span>';
+  const [fund, news] = await Promise.all([
+    fetchUSFundamentals(apiKey, id),
+    fetchUSNews(apiKey, id)
+  ]);
+  usFunds[id] = fund || {};
+  renderUS();
+  updateSummary();
+  const row2 = document.getElementById(`drow-us-${id}`);
+  if (row2) row2.classList.add('open');
+  const f = fund || {};
+  renderDetailPanel(`dcontent-us-${id}`, id, f.desc || s.name, f, news, s.isETF, true);
+}
+
+// ══════════════════════════════════════════════
+//  Render detail panel
+// ══════════════════════════════════════════════
+function renderDetailPanel(containerId, id, name, f, news, isETF, isUS) {
+  const chips = [
+    { k:'EPS',   v: isETF ? 'ETF' : (f.eps!=null ? fmtN(f.eps,2) : '—'), good: f.eps>0 },
+    { k:'P/E',   v: isETF ? 'ETF' : (f.pe !=null ? fmtN(f.pe,1)+'x' : '—'), good: f.pe>0&&f.pe<30 },
+    { k:'ROE %', v: isETF ? 'ETF' : (f.roe!=null ? f.roe+'%' : '—'), good: f.roe>15 },
+    { k:'ROA %', v: isETF ? 'ETF' : (f.roa!=null ? f.roa+'%' : '—'), good: f.roa>5 },
+    ...(isUS ? [
+      { k:'殖利率', v: f.divYield!=null ? fmtN(f.divYield,2)+'%' : '—', good: f.divYield>2 },
+      { k:'市值',   v: f.mktCap!=null ? '$'+fmtN(f.mktCap/1000,1)+'B' : '—', good: true },
+    ] : []),
+  ];
+  const chipsHtml = chips.map(c => `
+    <div class="chip">
+      <div class="chip-k">${c.k}</div>
+      <div class="chip-v ${c.v==='ETF'?'neu-val':c.good?'good':''}">${c.v}</div>
+    </div>`).join('');
+  const newsHtml = news.length ? `
+    <div class="news-list">
+      ${news.map(n=>`<div class="news-item"><a href="${n.url}" target="_blank">${n.headline}</a></div>`).join('')}
+    </div>` : '';
+  const infoHtml = isUS && f.industry ? `<p style="font-size:0.62rem;color:var(--muted);margin-bottom:8px">📂 ${f.industry}${f.country?' · '+f.country:''}</p>` : '';
+  document.getElementById(containerId).innerHTML = `
+    <div class="detail-grid">
+      <div class="metric-chips">${chipsHtml}</div>
+      <div class="detail-desc">
+        <h4>📊 ${id} ${name}</h4>
+        ${infoHtml}
+        ${isETF ? '<p style="color:var(--muted)">ETF 不適用 EPS / PE / ROE / ROA 等個股指標</p>' : ''}
+        ${newsHtml || (isUS ? '' : '<p style="color:var(--muted)">台股新聞請直接查看 goodinfo.tw</p>')}
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════
+//  Main load
+// ══════════════════════════════════════════════
+async function loadAll() {
+  const apiKey = document.getElementById('finnhubKey').value.trim();
+  const token  = document.getElementById('finmindToken').value.trim();
+  if (!apiKey && !token) { setStatus('請至少輸入一組 API 金鑰', 'err'); return; }
+  const btn = document.getElementById('fetchBtn');
+  const refreshIcon = document.getElementById('refreshIcon');
+  btn.disabled = true;
+  refreshIcon.classList.add('spin');
+  setStatus('正在連接數據源...', 'loading');
+  renderTW(); renderUS(); updateSummary();
+  const tasks = [];
+  if (token)  tasks.push(fetchTWPrices(token).then(p => { twPrices = p; }));
+  if (apiKey) tasks.push(fetchUSPrices(apiKey).then(p => { usPrices = p; }));
+  if (apiKey) tasks.push(...US_PORTFOLIO.filter(s=>!s.isETF).map(s =>
+    fetchUSFundamentals(apiKey, s.id).then(f => { if(f) usFunds[s.id] = f; })
+  ));
+  try {
+    await Promise.allSettled(tasks);
+    renderTW(); renderUS(); updateSummary();
+    const now = new Date();
+    document.getElementById('lastUpdated').textContent = `最後更新：${now.toLocaleTimeString('zh-TW')}`;
+    setStatus(`✓ 更新完成 ${now.toLocaleTimeString('zh-TW')} — 美股: Finnhub · 台股: FinMind`, 'ok');
+  } catch(e) {
+    setStatus('部分數據載入失敗，請確認 API 金鑰是否正確', 'err');
+  } finally {
+    btn.disabled = false;
+    refreshIcon.classList.remove('spin');
+  }
+}
+
+function setStatus(msg, type) {
+  const el = document.getElementById('statusLine');
+  el.textContent = msg;
+  el.className = `status-line status-${type}`;
+}
+
+// 初始渲染
+renderTW(); renderUS(); updateSummary();
+
+// 每5分鐘自動刷新
+setInterval(() => {
+  if(document.getElementById('finnhubKey').value || document.getElementById('finmindToken').value)
+    loadAll();
+}, 300000);
+</script>
+
+</body>
+</html>
