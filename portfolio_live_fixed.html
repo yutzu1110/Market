@@ -4,196 +4,184 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio Pro</title>
+<title>Portfolio Pro v5</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root{
   --bg:#060810;--s1:#0d1120;--s2:#131826;--s3:#1a2035;
   --b1:#1e2538;--b2:#2a3350;--b3:#3a4570;
-  --tx:#c8d0e8;--mu:#485070;--dim:#2a3350;
+  --tx:#c8d0e8;--mu:#485070;
   --tw:#38bdf8;--us:#818cf8;--ai:#f472b6;
   --g:#34d399;--r:#fb7185;--y:#fbbf24;--acc:#e2c97e;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--tx);font-family:'Fira Code',monospace;min-height:100vh;overflow-x:hidden}
 body::before{content:'';position:fixed;inset:0;
-  background-image:linear-gradient(rgba(56,189,248,.025) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(56,189,248,.025) 1px,transparent 1px);
+  background-image:linear-gradient(rgba(56,189,248,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(56,189,248,.022) 1px,transparent 1px);
   background-size:44px 44px;pointer-events:none;z-index:0}
-.wrap{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:20px 16px 80px}
+.wrap{position:relative;z-index:1;max-width:1300px;margin:0 auto;padding:20px 16px 80px}
 
-/* TABS */
 .tabs{display:flex;gap:3px;margin-bottom:20px;background:var(–s1);border:1px solid var(–b1);border-radius:12px;padding:4px}
 .tab{flex:1;text-align:center;padding:9px 4px;font-size:.66rem;font-family:‘Syne’,sans-serif;font-weight:700;
 letter-spacing:.5px;border-radius:9px;cursor:pointer;transition:all .2s;color:var(–mu);border:none;background:none}
 .tab:hover{color:var(–tx)}
-.tab.active{background:var(–s3);color:var(–acc);box-shadow:0 0 16px rgba(226,201,126,.08)}
+.tab.active{background:var(–s3);color:var(–acc)}
 .page{display:none}.page.active{display:block}
 
-/* HDR */
 .hdr{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
-.hdr h1{font-family:‘Syne’,sans-serif;font-size:1.8rem;font-weight:800;color:var(–acc);letter-spacing:-1px;line-height:1}
-.hdr p{font-size:.58rem;color:var(–mu);margin-top:4px;letter-spacing:1.5px;text-transform:uppercase}
+.hdr h1{font-family:‘Syne’,sans-serif;font-size:1.75rem;font-weight:800;color:var(–acc);letter-spacing:-1px;line-height:1}
+.hdr p{font-size:.57rem;color:var(–mu);margin-top:4px;letter-spacing:1.5px;text-transform:uppercase}
 
-/* SETUP */
 .setup{background:linear-gradient(135deg,rgba(56,189,248,.05),rgba(129,140,248,.05));
 border:1px solid var(–b2);border-radius:14px;padding:18px;margin-bottom:20px}
-.setup h3{font-family:‘Syne’,sans-serif;font-size:.8rem;color:var(–acc);margin-bottom:12px}
+.setup h3{font-family:‘Syne’,sans-serif;font-size:.78rem;color:var(–acc);margin-bottom:12px}
 .api-grid{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end}
-label{font-size:.57rem;color:var(–mu);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:4px}
-input[type=text],input[type=number]{width:100%;background:var(–s1);border:1px solid var(–b2);border-radius:8px;
+label{font-size:.56rem;color:var(–mu);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:4px}
+input[type=text],input[type=number]{width:100%;background:var(–s1);border:1px solid var(–b2);border-radius:7px;
 color:var(–tx);font-family:‘Fira Code’,monospace;font-size:.68rem;padding:7px 10px;outline:none;transition:border-color .2s}
-input[type=text]:focus,input[type=number]:focus{border-color:var(–tw)}
+input:focus{border-color:var(–tw)}
 input::placeholder{color:var(–mu)}
-.btn{background:linear-gradient(135deg,rgba(56,189,248,.18),rgba(129,140,248,.18));border:1px solid var(–b2);
-color:var(–tx);font-family:‘Fira Code’,monospace;font-size:.66rem;padding:7px 14px;border-radius:8px;
+.btn{background:linear-gradient(135deg,rgba(56,189,248,.16),rgba(129,140,248,.16));border:1px solid var(–b2);
+color:var(–tx);font-family:‘Fira Code’,monospace;font-size:.65rem;padding:7px 14px;border-radius:7px;
 cursor:pointer;transition:all .2s;white-space:nowrap;height:34px}
 .btn:hover{border-color:var(–tw);color:var(–tw)}
 .btn:disabled{opacity:.4;pointer-events:none}
-.btn.primary{background:linear-gradient(135deg,rgba(56,189,248,.28),rgba(129,140,248,.28));color:var(–acc);border-color:var(–b3)}
-.api-note{font-size:.58rem;color:var(–mu);margin-top:8px;line-height:1.7}
+.btn.primary{background:linear-gradient(135deg,rgba(56,189,248,.26),rgba(129,140,248,.26));color:var(–acc);border-color:var(–b3)}
+.api-note{font-size:.57rem;color:var(–mu);margin-top:7px;line-height:1.7}
 .api-note a{color:var(–tw);text-decoration:none}.api-note a:hover{text-decoration:underline}
-#statusLine{font-size:.62rem;margin-top:6px;min-height:16px}
+#statusLine{font-size:.61rem;margin-top:6px;min-height:16px}
 .ok{color:var(–g)}.err{color:var(–r)}.loading{color:var(–y)}
 
-/* CARDS */
 .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px}
 .card{background:var(–s1);border:1px solid var(–b1);border-radius:10px;padding:12px 14px;animation:up .4s ease both}
-.card-lbl{font-size:.56rem;color:var(–mu);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.card-lbl{font-size:.54rem;color:var(–mu);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
 .card-val{font-size:1.05rem;font-family:‘Syne’,sans-serif;font-weight:700}
 @keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-/* SECTION */
 .sec-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.badge{font-family:‘Syne’,sans-serif;font-size:.63rem;font-weight:700;padding:3px 11px;border-radius:99px;letter-spacing:.8px}
+.badge{font-family:‘Syne’,sans-serif;font-size:.62rem;font-weight:700;padding:3px 11px;border-radius:99px;letter-spacing:.8px}
 .btw{background:rgba(56,189,248,.1);color:var(–tw);border:1px solid rgba(56,189,248,.2)}
 .bus{background:rgba(129,140,248,.1);color:var(–us);border:1px solid rgba(129,140,248,.2)}
-.sec-meta{font-size:.6rem;color:var(–mu);margin-left:auto}
+.sec-meta{font-size:.59rem;color:var(–mu);margin-left:auto}
 
-/* TABLE */
 .tbl-wrap{border:1px solid var(–b1);border-radius:12px;overflow:hidden;overflow-x:auto;margin-bottom:20px}
-table{width:100%;border-collapse:collapse;min-width:780px}
+table{width:100%;border-collapse:collapse;min-width:900px}
 thead{background:var(–s2)}
-th{font-size:.54rem;color:var(–mu);text-transform:uppercase;letter-spacing:.8px;padding:8px 9px;text-align:right;
+th{font-size:.52rem;color:var(–mu);text-transform:uppercase;letter-spacing:.7px;padding:8px 9px;text-align:right;
 white-space:nowrap;font-weight:400;border-bottom:1px solid var(–b1)}
 th:first-child{text-align:left}
 tbody tr{background:var(–s1);border-top:1px solid var(–b1);transition:background .15s;cursor:pointer}
 tbody tr:hover{background:var(–s2)}
-td{padding:8px 9px;font-size:.68rem;text-align:right;white-space:nowrap;vertical-align:middle}
+td{padding:8px 9px;font-size:.67rem;text-align:right;white-space:nowrap;vertical-align:middle}
 td:first-child{text-align:left}
-.tn{font-family:‘Syne’,sans-serif;font-size:.76rem;font-weight:700}
-.ts{font-size:.55rem;color:var(–mu);margin-top:1px}
+.tn{font-family:‘Syne’,sans-serif;font-size:.75rem;font-weight:700}
+.ts{font-size:.54rem;color:var(–mu);margin-top:1px}
 .twc{color:var(–tw)}.usc{color:var(–us)}
 .g{color:var(–g)}.r{color:var(–r)}.n{color:var(–mu)}
 .pb{display:inline-block;padding:2px 6px;border-radius:4px;font-size:.62rem;font-weight:500}
 .pg{background:rgba(52,211,153,.1);color:var(–g)}.pr{background:rgba(251,113,133,.1);color:var(–r)}
-.na{color:var(–mu);font-size:.58rem}
+.na{color:var(–mu);font-size:.57rem}
 
 /* DETAIL */
 .drow{display:none}.drow.open{display:table-row}
-.drow>td{background:#090c18;padding:14px 16px;text-align:left;border-top:1px dashed var(–dim)}
+.drow>td{background:#090c18;padding:14px 16px;text-align:left;border-top:1px dashed rgba(56,189,248,.15)}
 .dpanel{display:grid;grid-template-columns:auto 1fr;gap:16px}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{background:var(–s2);border:1px solid var(–b1);border-radius:8px;padding:7px 10px;min-width:82px}
-.chip-k{font-size:.53rem;color:var(–mu);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
-.chip-v{font-size:.8rem;font-weight:600;font-family:‘Syne’,sans-serif}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.chip{background:var(–s2);border:1px solid var(–b1);border-radius:8px;padding:7px 10px;min-width:80px}
+.chip-k{font-size:.52rem;color:var(–mu);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
+.chip-v{font-size:.78rem;font-weight:600;font-family:‘Syne’,sans-serif}
 .chip-v.gd{color:var(–g)}.chip-v.bd{color:var(–r)}.chip-v.et{color:var(–mu)}
-.chart-row{margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.chart-box{background:var(–s2);border:1px solid var(–b1);border-radius:10px;padding:10px}
-.chart-box h5{font-size:.58rem;color:var(–mu);margin-bottom:7px;font-weight:400;text-transform:uppercase;letter-spacing:.8px}
-.chart-box canvas{max-height:130px}
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.chart-box{background:var(–s2);border:1px solid var(–b1);border-radius:8px;padding:10px}
+.chart-box h5{font-size:.56rem;color:var(–mu);margin-bottom:6px;font-weight:400;text-transform:uppercase;letter-spacing:.8px}
+.chart-box canvas{max-height:120px}
 .news-list{margin-top:8px;display:flex;flex-direction:column;gap:4px}
-.news-item{font-size:.61rem;color:var(–mu);display:flex;gap:5px}
+.news-item{font-size:.6rem;color:var(–mu);display:flex;gap:5px}
 .news-item::before{content:‘▸’;color:var(–tw);flex-shrink:0}
 .news-item a{color:var(–tw);text-decoration:none}.news-item a:hover{text-decoration:underline}
-.det-right h4{font-family:‘Syne’,sans-serif;font-size:.74rem;color:var(–acc);margin-bottom:6px}
-.det-right p{font-size:.66rem;color:var(–tx);line-height:1.75;opacity:.85}
+.det-right h4{font-family:‘Syne’,sans-serif;font-size:.72rem;color:var(–acc);margin-bottom:6px}
+
+/* DEBUG panel */
+.debug-box{background:rgba(251,191,36,.05);border:1px solid rgba(251,191,36,.2);border-radius:8px;
+padding:8px 12px;font-size:.58rem;color:var(–y);margin-top:8px;max-height:120px;overflow-y:auto;white-space:pre-wrap;display:none}
 
 /* EDITOR */
-.port-editor{background:var(–s1);border:1px solid var(–b1);border-radius:12px;padding:16px;margin-bottom:18px}
-.port-editor h3{font-family:‘Syne’,sans-serif;font-size:.8rem;color:var(–acc);margin-bottom:12px}
-.edit-list{display:flex;flex-direction:column;gap:6px}
-.edit-row{display:grid;grid-template-columns:80px 1fr 90px 100px 100px 52px auto;gap:5px;align-items:center}
-.edit-row input{background:var(–s2);border:1px solid var(–b1);border-radius:6px;color:var(–tx);
-font-family:‘Fira Code’,monospace;font-size:.66rem;padding:5px 8px;outline:none;width:100%}
+.port-editor{background:var(–s1);border:1px solid var(–b1);border-radius:12px;padding:16px;margin-bottom:16px}
+.port-editor h3{font-family:‘Syne’,sans-serif;font-size:.78rem;color:var(–acc);margin-bottom:12px}
+.edit-list{display:flex;flex-direction:column;gap:5px}
+.edit-row{display:grid;grid-template-columns:80px 1fr 88px 100px 100px 52px auto;gap:5px;align-items:center}
+.edit-row input{background:var(–s2);border:1px solid var(–b1);border-radius:5px;color:var(–tx);
+font-family:‘Fira Code’,monospace;font-size:.64rem;padding:5px 7px;outline:none;width:100%}
 .edit-row input:focus{border-color:var(–tw)}
 .del-btn{background:rgba(251,113,133,.1);border:1px solid rgba(251,113,133,.2);color:var(–r);
-border-radius:6px;padding:4px 8px;cursor:pointer;font-size:.68rem;transition:all .2s}
+border-radius:5px;padding:4px 8px;cursor:pointer;font-size:.66rem;transition:all .2s}
 .del-btn:hover{background:rgba(251,113,133,.2)}
 .etf-chk{accent-color:var(–tw);cursor:pointer}
 
 /* SEARCH */
-.search-bar{display:flex;gap:7px;margin-bottom:14px;align-items:center}
-.search-bar input{flex:1}
-.seg{padding:5px 13px;border-radius:7px;cursor:pointer;font-size:.63rem;font-family:‘Syne’,sans-serif;
+.search-bar{display:flex;gap:7px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.search-bar input{flex:1;min-width:180px}
+.seg{padding:5px 12px;border-radius:6px;cursor:pointer;font-size:.62rem;font-family:‘Syne’,sans-serif;
 font-weight:700;border:1px solid var(–b2);background:transparent;color:var(–mu);transition:all .2s}
 .seg.on{background:var(–s3);color:var(–acc);border-color:var(–b3)}
 .sr-box{background:var(–s1);border:1px solid var(–b1);border-radius:12px;padding:16px;animation:up .3s ease}
 .sr-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
-.sr-ticker{font-family:‘Syne’,sans-serif;font-size:1.3rem;font-weight:800;color:var(–acc)}
-.sr-name{font-size:.67rem;color:var(–mu);margin-top:2px}
-.sr-price{font-family:‘Syne’,sans-serif;font-size:1.5rem;font-weight:700}
+.sr-ticker{font-family:‘Syne’,sans-serif;font-size:1.25rem;font-weight:800;color:var(–acc)}
+.sr-name{font-size:.65rem;color:var(–mu);margin-top:2px}
+.sr-price{font-family:‘Syne’,sans-serif;font-size:1.4rem;font-weight:700}
 .sr-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
 .sr-charts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.sr-cbox{background:var(–s2);border:1px solid var(–b1);border-radius:10px;padding:10px}
-.sr-cbox h5{font-size:.58rem;color:var(–mu);margin-bottom:7px;text-transform:uppercase;letter-spacing:.8px}
-.sr-cbox canvas{max-height:140px}
+.sr-cbox{background:var(–s2);border:1px solid var(–b1);border-radius:8px;padding:10px}
+.sr-cbox h5{font-size:.56rem;color:var(–mu);margin-bottom:6px;text-transform:uppercase;letter-spacing:.8px}
+.sr-cbox canvas{max-height:130px}
 
 /* AI */
-.ai-box{background:var(–s1);border:1px solid var(–b1);border-radius:12px;padding:16px;margin-bottom:16px}
-.ai-box h3{font-family:‘Syne’,sans-serif;font-size:.8rem;color:var(–ai);margin-bottom:10px;
-display:flex;align-items:center;gap:6px}
+.ai-box{background:var(–s1);border:1px solid var(–b1);border-radius:12px;padding:16px;margin-bottom:14px}
+.ai-box h3{font-family:‘Syne’,sans-serif;font-size:.78rem;color:var(–ai);margin-bottom:10px;display:flex;align-items:center;gap:6px}
 .ai-box h3::before{content:‘✦’;color:var(–ai)}
 .mkt-btns{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
-.mkt-btn{padding:5px 13px;border-radius:7px;cursor:pointer;font-size:.61rem;font-family:‘Syne’,sans-serif;
+.mkt-btn{padding:5px 12px;border-radius:6px;cursor:pointer;font-size:.61rem;font-family:‘Syne’,sans-serif;
 font-weight:700;border:1px solid var(–b2);background:transparent;color:var(–mu);transition:all .2s}
 .mkt-btn.on{background:rgba(244,114,182,.12);color:var(–ai);border-color:rgba(244,114,182,.3)}
-.ai-run{background:linear-gradient(135deg,rgba(244,114,182,.22),rgba(129,140,248,.22));
+.ai-run{background:linear-gradient(135deg,rgba(244,114,182,.2),rgba(129,140,248,.2));
 border:1px solid rgba(244,114,182,.3);color:var(–ai);font-family:‘Syne’,sans-serif;font-weight:700;
 font-size:.7rem;padding:10px;border-radius:9px;cursor:pointer;width:100%;transition:all .2s;letter-spacing:.5px}
-.ai-run:hover{box-shadow:0 0 18px rgba(244,114,182,.2)}
+.ai-run:hover{box-shadow:0 0 16px rgba(244,114,182,.18)}
 .ai-run:disabled{opacity:.4;pointer-events:none}
-.ai-out{background:var(–s1);border:1px solid var(–b1);border-radius:12px;padding:16px;animation:up .4s ease}
+.ai-out{background:var(–s1);border:1px solid var(–b1);border-radius:12px;padding:16px}
 .ai-sec{margin-bottom:18px}
-.ai-sec h4{font-family:‘Syne’,sans-serif;font-size:.78rem;color:var(–ai);margin-bottom:9px;
-padding-bottom:5px;border-bottom:1px solid var(–b1)}
-.ai-card{background:var(–s2);border:1px solid var(–b1);border-radius:10px;padding:12px 14px;margin-bottom:7px}
-.ai-top{display:flex;align-items:center;gap:9px;margin-bottom:6px}
-.ai-ticker{font-family:‘Syne’,sans-serif;font-size:.88rem;font-weight:800;color:var(–acc)}
-.ai-sig{font-size:.58rem;padding:2px 7px;border-radius:4px;font-weight:600}
+.ai-sec h4{font-family:‘Syne’,sans-serif;font-size:.76rem;color:var(–ai);margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(–b1)}
+.ai-card{background:var(–s2);border:1px solid var(–b1);border-radius:9px;padding:11px 13px;margin-bottom:6px}
+.ai-top{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.ai-ticker{font-family:‘Syne’,sans-serif;font-size:.85rem;font-weight:800;color:var(–acc)}
+.ai-sig{font-size:.57rem;padding:2px 7px;border-radius:4px;font-weight:600}
 .sig-b{background:rgba(52,211,153,.14);color:var(–g)}
 .sig-h{background:rgba(251,191,36,.14);color:var(–y)}
 .sig-s{background:rgba(251,113,133,.14);color:var(–r)}
-.ai-card p{font-size:.66rem;color:var(–tx);line-height:1.75;opacity:.85}
-.ai-mets{display:flex;gap:7px;flex-wrap:wrap;margin-top:6px}
-.ai-met{font-size:.58rem;background:var(–s1);border:1px solid var(–b1);padding:2px 7px;border-radius:4px;color:var(–mu)}
+.ai-card p{font-size:.65rem;color:var(–tx);line-height:1.75;opacity:.85}
+.ai-mets{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.ai-met{font-size:.57rem;background:var(–s1);border:1px solid var(–b1);padding:2px 7px;border-radius:4px;color:var(–mu)}
 .ai-met span{color:var(–tx)}
 .theme-list{display:flex;flex-direction:column;gap:6px}
-.theme-item{background:var(–s2);border:1px solid var(–b1);border-radius:8px;padding:9px 12px;
-font-size:.66rem;line-height:1.7;color:var(–tx)}
+.theme-item{background:var(–s2);border:1px solid var(–b1);border-radius:7px;padding:9px 12px;font-size:.65rem;line-height:1.7;color:var(–tx)}
 .theme-item strong{color:var(–acc);font-family:‘Syne’,sans-serif}
+.warn-box{background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2);border-radius:8px;
+padding:10px 14px;font-size:.63rem;color:var(–y);line-height:1.7;margin-bottom:12px}
 
 .spin{animation:spin 1s linear infinite;display:inline-block}
 @keyframes spin{to{transform:rotate(360deg)}}
 .dot::after{content:’…’;animation:dots 1.2s steps(4,end) infinite}
 @keyframes dots{0%,20%{content:’.’}40%,60%{content:’..’}80%,100%{content:’…’}}
-.live-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(–g);
-margin-right:5px;animation:pulse 2s ease-in-out infinite}
+.live-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(–g);margin-right:5px;animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-footer{text-align:center;font-size:.58rem;color:var(–mu);margin-top:26px}
-
-/* error notice */
-.cors-note{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:8px;
-padding:10px 14px;font-size:.64rem;color:var(–y);line-height:1.65;margin-bottom:14px}
+footer{text-align:center;font-size:.57rem;color:var(–mu);margin-top:24px}
 
 @media(max-width:768px){
 .cards{grid-template-columns:repeat(2,1fr)}
 .api-grid{grid-template-columns:1fr}
 .edit-row{grid-template-columns:65px 1fr 80px auto}
-.sr-charts,.chart-row{grid-template-columns:1fr}
-.dpanel{grid-template-columns:1fr}
+.sr-charts,.chart-row,.dpanel{grid-template-columns:1fr}
 }
 </style>
 
@@ -208,31 +196,32 @@ padding:10px 14px;font-size:.64rem;color:var(–y);line-height:1.65;margin-botto
   <button class="tab" onclick="switchTab('ai')">✦ AI 分析</button>
 </div>
 
-<!-- ══ PORTFOLIO PAGE ══ -->
+<!-- ══ PORTFOLIO ══ -->
 
 <div id="page-portfolio" class="page active">
   <div class="hdr">
     <div><h1>PORTFOLIO LIVE</h1><p>Finnhub · FinMind · 即時報價 · 財務基本面</p></div>
     <button class="btn" onclick="loadAll()"><span id="ri">↻</span> 更新報價</button>
   </div>
-
   <div class="setup">
     <h3>🔑 API 金鑰設定</h3>
     <div class="api-grid">
-      <div><label>Finnhub Key（美股）</label>
-        <input id="fhKey" type="text" placeholder="d1xxxxx — finnhub.io 免費申請"/></div>
-      <div><label>FinMind Token（台股）</label>
-        <input id="fmToken" type="text" placeholder="eyJ0eXAi... — finmindtrade.com 免費申請"/></div>
-      <button class="btn primary" onclick="loadAll()" id="fetchBtn">▶ 載入數據</button>
+      <div><label>Finnhub Key（美股）</label><input id="fhKey" type="text" placeholder="d1xxxxx — finnhub.io 免費"/></div>
+      <div><label>FinMind Token（台股）</label><input id="fmToken" type="text" placeholder="eyJ0eXAi... — finmindtrade.com 免費"/></div>
+      <button class="btn primary" id="fetchBtn" onclick="loadAll()">▶ 載入數據</button>
     </div>
     <div class="api-note">
-      🌐 美股：<a href="https://finnhub.io" target="_blank">finnhub.io</a> 免費申請 Key（每分鐘60次）&nbsp;|&nbsp;
-      🌐 台股：<a href="https://finmindtrade.com" target="_blank">finmindtrade.com</a> 免費申請 Token（每天1000次）&nbsp;|&nbsp;
+      🌐 美股：<a href="https://finnhub.io" target="_blank">finnhub.io</a> 免費（每分鐘60次）｜
+      🌐 台股：<a href="https://finmindtrade.com" target="_blank">finmindtrade.com</a> 免費（每天1000次）｜
       🔒 金鑰只在瀏覽器本地使用
     </div>
     <div id="statusLine"></div>
+    <!-- Debug toggle -->
+    <div style="margin-top:6px;display:flex;align-items:center;gap:8px">
+      <input type="checkbox" id="debugChk" onchange="document.querySelectorAll('.debug-box').forEach(el=>el.style.display=this.checked?'block':'none')"/>
+      <label for="debugChk" style="font-size:.55rem;color:var(--mu)">顯示除錯資訊</label>
+    </div>
   </div>
-
   <div class="cards">
     <div class="card" style="animation-delay:.05s"><div class="card-lbl">總成本 TWD</div><div class="card-val" style="color:var(--acc)" id="sTotalCost">—</div></div>
     <div class="card" style="animation-delay:.1s"><div class="card-lbl">總市值 TWD</div><div class="card-val" id="sTotalPV">—</div></div>
@@ -240,92 +229,93 @@ padding:10px 14px;font-size:.64rem;color:var(–y);line-height:1.65;margin-botto
     <div class="card" style="animation-delay:.2s"><div class="card-lbl">整體報酬率</div><div class="card-val" id="sTotalRet">—</div></div>
   </div>
 
-  <div>
-    <div class="sec-head">
-      <span class="badge btw">台股 TW — FinMind</span>
-      <span class="sec-meta" id="twMeta"></span>
-    </div>
-    <div class="tbl-wrap">
-      <table><thead><tr>
-        <th>股票</th><th>股數</th><th>均價</th><th>現價↺</th>
-        <th>成本</th><th>現值</th><th>損益</th><th>報酬%</th>
-        <th>EPS</th><th>P/E</th><th>ROE%</th><th>ROA%</th><th>毛利%</th><th>市值</th>
-      </tr></thead>
-      <tbody id="twBody"><tr><td colspan="14" style="text-align:center;padding:18px;color:var(--mu)">輸入金鑰後載入</td></tr></tbody>
-      </table>
-    </div>
+  <!-- TW TABLE -->
+
+  <div class="sec-head">
+    <span class="badge btw">台股 TW — FinMind</span>
+    <span class="sec-meta" id="twMeta"></span>
+  </div>
+  <div class="tbl-wrap">
+    <table><thead><tr>
+      <th>股票</th><th>股數</th><th>均價</th><th>現價</th>
+      <th>成本</th><th>現值</th><th>損益</th><th>報酬%</th>
+      <th>EPS</th><th>P/E</th><th>ROE%</th><th>ROA%</th><th>毛利%</th><th>市值億</th>
+    </tr></thead>
+    <tbody id="twBody"><tr><td colspan="14" style="text-align:center;padding:18px;color:var(--mu)">輸入金鑰後載入</td></tr></tbody>
+    </table>
   </div>
 
-  <div>
-    <div class="sec-head">
-      <span class="badge bus">美股 US — Finnhub</span>
-      <span class="sec-meta" id="usMeta"></span>
-    </div>
-    <div class="tbl-wrap">
-      <table><thead><tr>
-        <th>股票</th><th>股數</th><th>均價USD</th><th>現價USD↺</th>
-        <th>成本TWD</th><th>現值TWD</th><th>損益TWD</th><th>報酬%</th>
-        <th>EPS</th><th>P/E</th><th>ROE%</th><th>ROA%</th><th>毛利%</th><th>市值B</th>
-      </tr></thead>
-      <tbody id="usBody"><tr><td colspan="14" style="text-align:center;padding:18px;color:var(--mu)">輸入金鑰後載入</td></tr></tbody>
-      </table>
-    </div>
-  </div>
+  <!-- US TABLE -->
 
-  <footer><span class="live-dot"></span>點擊任一行展開基本面詳情 · <span id="lastUpd">尚未更新</span></footer>
+  <div class="sec-head">
+    <span class="badge bus">美股 US — Finnhub</span>
+    <span class="sec-meta" id="usMeta"></span>
+  </div>
+  <div class="tbl-wrap">
+    <table><thead><tr>
+      <th>股票</th><th>股數</th><th>均價USD</th><th>現價USD</th>
+      <th>成本TWD</th><th>現值TWD</th><th>損益TWD</th><th>報酬%</th>
+      <th>EPS</th><th>P/E</th><th>ROE%</th><th>ROA%</th><th>毛利%</th><th>市值$B</th>
+    </tr></thead>
+    <tbody id="usBody"><tr><td colspan="14" style="text-align:center;padding:18px;color:var(--mu)">輸入金鑰後載入</td></tr></tbody>
+    </table>
+  </div>
+  <footer><span class="live-dot"></span>點擊任一行展開基本面 · <span id="lastUpd">尚未更新</span></footer>
 </div>
 
-<!-- ══ EDITOR PAGE ══ -->
+<!-- ══ EDITOR ══ -->
 
 <div id="page-editor" class="page">
-  <div class="hdr"><div><h1>編輯持股</h1><p>自行填入 · 新增 · 刪除</p></div></div>
+  <div class="hdr"><div><h1>編輯持股</h1><p>自行填入成本 · 股數 · 代號</p></div></div>
   <div class="port-editor">
-    <h3>🇹🇼 台股持股</h3>
-    <div style="display:grid;grid-template-columns:80px 1fr 90px 100px 100px 52px auto;gap:5px;margin-bottom:5px">
-      <span style="font-size:.53rem;color:var(--mu)">代號</span><span style="font-size:.53rem;color:var(--mu)">名稱</span>
-      <span style="font-size:.53rem;color:var(--mu)">股數</span><span style="font-size:.53rem;color:var(--mu)">均價TWD</span>
-      <span style="font-size:.53rem;color:var(--mu)">總成本</span><span style="font-size:.53rem;color:var(--mu)">ETF?</span>
-      <span></span>
+    <h3>🇹🇼 台股</h3>
+    <div style="display:grid;grid-template-columns:80px 1fr 88px 100px 100px 52px auto;gap:5px;margin-bottom:5px">
+      <span style="font-size:.52rem;color:var(--mu)">代號</span><span style="font-size:.52rem;color:var(--mu)">名稱</span>
+      <span style="font-size:.52rem;color:var(--mu)">股數</span><span style="font-size:.52rem;color:var(--mu)">均價TWD</span>
+      <span style="font-size:.52rem;color:var(--mu)">總成本TWD</span><span style="font-size:.52rem;color:var(--mu)">ETF?</span><span></span>
     </div>
     <div id="twEditList" class="edit-list"></div>
     <div style="margin-top:8px;display:flex;gap:6px">
-      <button class="btn" onclick="addTWRow()">+ 新增台股</button>
+      <button class="btn" onclick="addRow('tw')">+ 新增台股</button>
     </div>
   </div>
   <div class="port-editor">
-    <h3>🇺🇸 美股持股</h3>
-    <div style="display:grid;grid-template-columns:80px 1fr 90px 100px 100px 52px auto;gap:5px;margin-bottom:5px">
-      <span style="font-size:.53rem;color:var(--mu)">代號</span><span style="font-size:.53rem;color:var(--mu)">名稱</span>
-      <span style="font-size:.53rem;color:var(--mu)">股數</span><span style="font-size:.53rem;color:var(--mu)">均價USD</span>
-      <span style="font-size:.53rem;color:var(--mu)">總成本TWD</span><span style="font-size:.53rem;color:var(--mu)">ETF?</span>
-      <span></span>
+    <h3>🇺🇸 美股</h3>
+    <div style="display:grid;grid-template-columns:80px 1fr 88px 100px 100px 52px auto;gap:5px;margin-bottom:5px">
+      <span style="font-size:.52rem;color:var(--mu)">代號</span><span style="font-size:.52rem;color:var(--mu)">名稱</span>
+      <span style="font-size:.52rem;color:var(--mu)">股數</span><span style="font-size:.52rem;color:var(--mu)">均價USD</span>
+      <span style="font-size:.52rem;color:var(--mu)">總成本TWD</span><span style="font-size:.52rem;color:var(--mu)">ETF?</span><span></span>
     </div>
     <div id="usEditList" class="edit-list"></div>
     <div style="margin-top:8px;display:flex;gap:6px">
-      <button class="btn" onclick="addUSRow()">+ 新增美股</button>
+      <button class="btn" onclick="addRow('us')">+ 新增美股</button>
       <button class="btn primary" onclick="savePortfolio()">💾 儲存並套用</button>
     </div>
   </div>
-  <div id="saveMsg" style="font-size:.66rem;color:var(--g);margin-top:6px;min-height:16px"></div>
+  <div id="saveMsg" style="font-size:.65rem;color:var(--g);margin-top:6px;min-height:16px"></div>
 </div>
 
-<!-- ══ SEARCH PAGE ══ -->
+<!-- ══ SEARCH ══ -->
 
 <div id="page-search" class="page">
-  <div class="hdr"><div><h1>股票查詢</h1><p>輸入代號直接搜尋</p></div></div>
+  <div class="hdr"><div><h1>股票查詢</h1><p>輸入代號即時查詢</p></div></div>
   <div class="search-bar">
     <input id="searchInput" type="text" placeholder="例：2330、AAPL、0050..." onkeydown="if(event.key==='Enter')doSearch()"/>
-    <button class="seg on" id="sbtw" onclick="setSearchMkt('TW')">🇹🇼 台股</button>
-    <button class="seg" id="sbus" onclick="setSearchMkt('US')">🇺🇸 美股</button>
+    <button class="seg on" id="sbtw" onclick="setMkt('TW')">🇹🇼 台股</button>
+    <button class="seg" id="sbus" onclick="setMkt('US')">🇺🇸 美股</button>
     <button class="btn primary" onclick="doSearch()">🔍 查詢</button>
   </div>
-  <div id="searchResult"><div style="font-size:.7rem;color:var(--mu);text-align:center;padding:36px">輸入代號後按查詢</div></div>
+  <div id="searchResult"><div style="font-size:.68rem;color:var(--mu);text-align:center;padding:36px">輸入代號後按查詢</div></div>
 </div>
 
-<!-- ══ AI PAGE ══ -->
+<!-- ══ AI ══ -->
 
 <div id="page-ai" class="page">
   <div class="hdr"><div><h1>AI 分析預測</h1><p>Claude AI · 市場題材 · 進場訊號</p></div></div>
+  <div class="warn-box">
+    ⚠️ <strong>AI 分析</strong>需要在 <strong>claude.ai</strong> 中開啟此頁面（Artifact 環境），或下載 HTML 到本機直接用 Chrome 開啟。<br>
+    GitHub Pages 的安全限制（CORS）會阻擋對 Anthropic API 的呼叫。台股 FinMind / 美股 Finnhub 的報價功能不受此限制影響。
+  </div>
   <div class="ai-box">
     <h3>AI 市場分析設定</h3>
     <div style="margin-bottom:8px"><label style="margin-bottom:5px;display:block">分析市場</label>
@@ -347,11 +337,11 @@ padding:10px 14px;font-size:.64rem;color:var(–y);line-height:1.65;margin-botto
   <div id="aiOutput" style="display:none"></div>
 </div>
 
-</div>
+</div><!-- /wrap -->
 
 <script>
 // ══════════════════════════════════════════
-//  持股資料（可在編輯頁修改）
+//  持股資料
 // ══════════════════════════════════════════
 let TW_PORT = [
   {id:'0919',name:'群益台灣精選高息ETF',shares:4221,avgCost:22.3, totalCost:94181, isETF:true},
@@ -368,157 +358,11 @@ let US_PORT = [
 ];
 const USD_TWD = 32.5;
 
-// ── Cache ──
 let twPx={}, usPx={}, twF={}, usF={}, newsC={};
-
-// ══════════════════════════════════════════
-//  FinMind fetch helper — 正確使用 Authorization header
-// ══════════════════════════════════════════
-async function fmFetch(dataset, dataId, startDate, endDate, token){
-  const params = new URLSearchParams({dataset});
-  if(dataId)   params.append('data_id', dataId);
-  if(startDate)params.append('start_date', startDate);
-  if(endDate)  params.append('end_date', endDate);
-  // FinMind 正確做法：token 用 query param（Authorization header 在瀏覽器有 CORS 問題）
-  if(token) params.append('token', token);
-  const url = `https://api.finmindtrade.com/api/v4/data?${params}`;
-  const r = await fetch(url);
-  if(!r.ok) throw new Error(`HTTP ${r.status}`);
-  return await r.json();
-}
-
-// ══════════════════════════════════════════
-//  台股現價（ETF + 個股 都用 TaiwanStockPrice）
-// ══════════════════════════════════════════
-async function fetchTWPrices(token){
-  const res = {};
-  const today = daysAgo(0), start = daysAgo(10);
-  await Promise.allSettled(TW_PORT.map(async s => {
-    try{
-      const j = await fmFetch('TaiwanStockPrice', s.id, start, today, token);
-      if(j.data && j.data.length > 0)
-        res[s.id] = parseFloat(j.data[j.data.length-1].close);
-    }catch(e){ console.warn('price fail', s.id, e.message); }
-  }));
-  return res;
-}
-
-// ══════════════════════════════════════════
-//  台股基本面 — FinMind 綜合損益表
-//  type 欄位是中文，例如「基本每股盈餘」「毛利率」等
-//  我們同時抓 TaiwanStockPER 取 P/E
-// ══════════════════════════════════════════
-async function fetchTWFund(token, id){
-  if(twF[id]) return twF[id];
-  try{
-    const start = daysAgo(365*3);
-    const [fsJ, perJ] = await Promise.all([
-      fmFetch('TaiwanStockFinancialStatements', id, start, null, token),
-      fmFetch('TaiwanStockPER', id, daysAgo(60), null, token),
-    ]);
-    const d = fsJ.data || [], pd = perJ.data || [];
-
-    // FinMind type 欄位為中文財報科目名稱
-    // 嘗試多種可能的名稱來容錯
-    const findVal = (types) => {
-      for(const t of types){
-        const rows = d.filter(x => x.type === t);
-        if(rows.length) return parseFloat(rows[rows.length-1].value);
-      }
-      return null;
-    };
-
-    const eps = findVal(['基本每股盈餘','每股盈餘(元)','EPS','BasicEPS']);
-    const roe = findVal(['股東權益報酬率','ROE','return_on_equity']);
-    const roa = findVal(['資產報酬率','ROA','return_on_assets']);
-
-    // 毛利率 = 毛利 / 營收
-    const gpTypes  = ['毛利（損）','毛利','GrossProfit','gross_profit'];
-    const rvTypes  = ['營業收入合計','營收','Revenue','revenue','operating_revenue'];
-    const gpRows = d.filter(x => gpTypes.includes(x.type)).slice(-8);
-    const rvRows = d.filter(x => rvTypes.includes(x.type)).slice(-8);
-    const grossMargin = gpRows.length && rvRows.length
-      ? +(parseFloat(gpRows[gpRows.length-1].value) /
-          parseFloat(rvRows[rvRows.length-1].value) * 100).toFixed(2)
-      : null;
-
-    // EPS 季史
-    const epsTypes = ['基本每股盈餘','每股盈餘(元)','EPS','BasicEPS'];
-    const epsHistory = d.filter(x => epsTypes.includes(x.type))
-      .slice(-8).map(x => ({q: x.date.slice(0,7), v: parseFloat(x.value)}));
-
-    // 毛利率季史
-    const gmHistory = gpRows.map((g,i) => {
-      const rv = rvRows[i];
-      return rv ? {q: g.date.slice(0,7), v: +(parseFloat(g.value)/parseFloat(rv.value)*100).toFixed(2)} : null;
-    }).filter(Boolean);
-
-    const pe = pd.length ? parseFloat(pd[pd.length-1].PER) : null;
-
-    const result = { eps, roe, roa, grossMargin, pe, epsHistory, gmHistory, mktCap:null };
-    twF[id] = result;
-    return result;
-  }catch(e){ console.warn('twFund fail', id, e.message); return null; }
-}
-
-// ══════════════════════════════════════════
-//  美股報價 Finnhub
-// ══════════════════════════════════════════
-async function fetchUSPrices(key){
-  const res = {};
-  await Promise.allSettled(US_PORT.map(async s => {
-    try{
-      const r = await fetch(`https://finnhub.io/api/v1/quote?symbol=${s.id}&token=${key}`);
-      const j = await r.json();
-      if(j.c && j.c > 0) res[s.id] = j.c;
-    }catch(e){ console.warn('US price fail', s.id); }
-  }));
-  return res;
-}
-
-// ══════════════════════════════════════════
-//  美股基本面 Finnhub
-// ══════════════════════════════════════════
-async function fetchUSFund(key, id){
-  if(usF[id]) return usF[id];
-  try{
-    const [mR, pR, eR] = await Promise.all([
-      fetch(`https://finnhub.io/api/v1/stock/metric?symbol=${id}&metric=all&token=${key}`),
-      fetch(`https://finnhub.io/api/v1/stock/profile2?symbol=${id}&token=${key}`),
-      fetch(`https://finnhub.io/api/v1/stock/earnings?symbol=${id}&limit=8&token=${key}`),
-    ]);
-    const m = await mR.json(), p = await pR.json(), e = await eR.json();
-    const mt = m.metric || {};
-    const result = {
-      eps:  mt.epsBasicExclExtraItemsTTM || mt.epsDilutedTTM || null,
-      pe:   mt.peBasicExclExtraTTM || mt.peTTM || null,
-      roe:  mt.roeTTM != null ? +(mt.roeTTM*100).toFixed(2) : null,
-      roa:  mt.roaTTM != null ? +(mt.roaTTM*100).toFixed(2) : null,
-      grossMargin: mt.grossMarginTTM != null ? +(mt.grossMarginTTM*100).toFixed(2) : null,
-      mktCap: p.marketCapitalization || null,
-      industry: p.finnhubIndustry || null,
-      name: p.name || id,
-      epsHistory: (e||[]).slice().reverse().map(x=>({q:x.period, v:x.actual})),
-      gmHistory: [],
-      epsEstimate: mt.epsNormalizedAnnual || null,
-    };
-    usF[id] = result;
-    return result;
-  }catch(e){ return null; }
-}
-
-// ══════════════════════════════════════════
-//  美股新聞 Finnhub
-// ══════════════════════════════════════════
-async function fetchNews(key, id){
-  if(newsC[id]) return newsC[id];
-  try{
-    const r = await fetch(`https://finnhub.io/api/v1/company-news?symbol=${id}&from=${daysAgo(7)}&to=${daysAgo(0)}&token=${key}`);
-    const j = await r.json();
-    newsC[id] = (j||[]).slice(0,3).map(n=>({h:n.headline, u:n.url}));
-    return newsC[id];
-  }catch(e){ return []; }
-}
+const dbg = (id, txt) => {
+  const el = document.getElementById(id);
+  if(el){ el.style.display = document.getElementById('debugChk')?.checked ? 'block' : 'none'; el.textContent = txt; }
+};
 
 // ══════════════════════════════════════════
 //  Helpers
@@ -529,21 +373,209 @@ const cls=(n)=>n>0?'g':n<0?'r':'n';
 const pb=(p)=>`<span class="pb ${p>=0?'pg':'pr'}">${fP(p)}</span>`;
 const naEl=()=>`<span class="na">ETF</span>`;
 const fF=(v,isE,s='')=>isE?naEl():(v!=null?fN(v,2)+s:'<span class="na">—</span>');
-const daysAgo=(n)=>{const d=new Date();d.setDate(d.getDate()-n);return d.toISOString().slice(0,10)};
+const dAgo=(n)=>{const d=new Date();d.setDate(d.getDate()-n);return d.toISOString().slice(0,10)};
 function setStatus(m,t){const e=document.getElementById('statusLine');if(e){e.textContent=m;e.className=t}}
 
 // ══════════════════════════════════════════
-//  Chart.js helper
+//  FinMind fetch — query param token (CORS safe)
+// ══════════════════════════════════════════
+async function fmGet(dataset, dataId, startDate, endDate, token){
+  const p = new URLSearchParams({dataset, token});
+  if(dataId)    p.append('data_id', dataId);
+  if(startDate) p.append('start_date', startDate);
+  if(endDate)   p.append('end_date', endDate);
+  const r = await fetch(`https://api.finmindtrade.com/api/v4/data?${p}`);
+  if(!r.ok) throw new Error(`FinMind HTTP ${r.status}`);
+  const j = await r.json();
+  if(j.status !== 200) throw new Error(`FinMind status ${j.status}: ${j.msg||''}`);
+  return j.data || [];
+}
+
+// ══════════════════════════════════════════
+//  台股 ETF + 個股 現價
+//  ETF 用 taiwan_stock_tick_snapshot（即時快照）
+//  個股用 TaiwanStockPrice（日K收盤）
+// ══════════════════════════════════════════
+async function fetchTWPrices(token){
+  const res = {};
+  const etfIds   = TW_PORT.filter(s=>s.isETF).map(s=>s.id);
+  const stockIds = TW_PORT.filter(s=>!s.isETF).map(s=>s.id);
+
+  // ETF 即時快照 snapshot endpoint
+  if(etfIds.length){
+    try{
+      const p = new URLSearchParams({token});
+      etfIds.forEach(id => p.append('data_id', id));
+      const r = await fetch(`https://api.finmindtrade.com/api/v4/taiwan_stock_tick_snapshot?${p}`);
+      const j = await r.json();
+      (j.data||[]).forEach(d => {
+        if(d.stock_id && d.close) res[d.stock_id] = parseFloat(d.close);
+      });
+      dbg('dbgETF', 'ETF snapshot: '+ JSON.stringify(j.data?.slice(0,2)));
+    }catch(e){ console.warn('ETF snapshot fail:', e.message); }
+  }
+
+  // 個股日K（ETF 若 snapshot 失敗也補一次）
+  const needDaily = stockIds.concat(etfIds.filter(id=>!res[id]));
+  await Promise.allSettled(needDaily.map(async id => {
+    try{
+      const d = await fmGet('TaiwanStockPrice', id, dAgo(14), dAgo(0), token);
+      if(d.length) res[id] = parseFloat(d[d.length-1].close);
+    }catch(e){ console.warn('daily price fail:', id); }
+  }));
+  return res;
+}
+
+// ══════════════════════════════════════════
+//  台股基本面
+//  FinMind TaiwanStockFinancialStatements
+//  type 欄位為英文：Revenue, GrossProfit, EPS, ROE, ROA
+//  也嘗試 origin_name 做 fallback
+// ══════════════════════════════════════════
+async function fetchTWFund(token, id){
+  if(twF[id]) return twF[id];
+  try{
+    const [fsData, perData] = await Promise.all([
+      fmGet('TaiwanStockFinancialStatements', id, dAgo(365*3), null, token),
+      fmGet('TaiwanStockPER', id, dAgo(90), null, token),
+    ]);
+
+    dbg(`dbgFS-${id}`, `FS rows: ${fsData.length}\nTypes: ${[...new Set(fsData.map(x=>x.type))].join(', ')}\nSample: ${JSON.stringify(fsData.slice(0,3))}`);
+
+    // 列出所有 type，做容錯匹配
+    const allTypes = new Set(fsData.map(x=>x.type));
+
+    const pickLast = (...candidates) => {
+      for(const c of candidates){
+        const rows = fsData.filter(x=>x.type===c || x.origin_name===c);
+        if(rows.length) return parseFloat(rows[rows.length-1].value);
+      }
+      return null;
+    };
+
+    // EPS: FinMind 英文 type
+    const eps = pickLast('EPS','BasicEPS','DilutedEPS','基本每股盈餘','每股盈餘(元)');
+    const roe = pickLast('ROE','ReturnOnEquity','股東權益報酬率');
+    const roa = pickLast('ROA','ReturnOnAssets','資產報酬率');
+
+    // 毛利率 = GrossProfit / Revenue
+    const gpRows = fsData.filter(x=>['GrossProfit','毛利（損）','毛利','Gross profit'].includes(x.type));
+    const rvRows = fsData.filter(x=>['Revenue','OperatingRevenue','營業收入合計','Operating revenue'].includes(x.type));
+
+    // 按日期排序，取最新8季
+    const sortByDate = arr => [...arr].sort((a,b)=>a.date.localeCompare(b.date));
+    const gpSorted = sortByDate(gpRows).slice(-8);
+    const rvSorted = sortByDate(rvRows).slice(-8);
+
+    const grossMargin = gpSorted.length && rvSorted.length
+      ? +(parseFloat(gpSorted[gpSorted.length-1].value) / parseFloat(rvSorted[rvSorted.length-1].value) * 100).toFixed(2)
+      : null;
+
+    // 季EPS折線圖
+    const epsSorted = sortByDate(fsData.filter(x=>['EPS','BasicEPS','基本每股盈餘','每股盈餘(元)'].includes(x.type))).slice(-8);
+    const epsHistory = epsSorted.map(x=>({q:x.date.slice(0,7), v:parseFloat(x.value)}));
+
+    // 毛利率折線圖（匹配最近8季）
+    const gmHistory = gpSorted.map((g,i) => {
+      const rv = rvSorted[i];
+      return rv ? {q:g.date.slice(0,7), v:+(parseFloat(g.value)/parseFloat(rv.value)*100).toFixed(2)} : null;
+    }).filter(Boolean);
+
+    const pe = perData.length ? parseFloat(perData[perData.length-1].PER) : null;
+
+    dbg(`dbgFS-${id}`, `eps=${eps} roe=${roe} roa=${roa} gm=${grossMargin}\nepsH=${epsHistory.length} gmH=${gmHistory.length}\nAllTypes: ${[...allTypes].join(',')}`);
+
+    const result = { eps, roe, roa, grossMargin, pe, epsHistory, gmHistory, mktCap:null };
+    twF[id] = result;
+    return result;
+  }catch(e){
+    console.warn('twFund fail', id, e.message);
+    return null;
+  }
+}
+
+// ══════════════════════════════════════════
+//  美股報價 Finnhub
+// ══════════════════════════════════════════
+async function fetchUSPrices(key){
+  const res = {};
+  await Promise.allSettled(US_PORT.map(async s=>{
+    try{
+      const r = await fetch(`https://finnhub.io/api/v1/quote?symbol=${s.id}&token=${key}`);
+      const j = await r.json();
+      if(j.c && j.c > 0) res[s.id] = j.c;
+    }catch(e){}
+  }));
+  return res;
+}
+
+// ══════════════════════════════════════════
+//  美股基本面 Finnhub
+//  ROE/ROA: Finnhub 的 metric 值是小數（0.xx），乘100才是百分比
+// ══════════════════════════════════════════
+async function fetchUSFund(key, id){
+  if(usF[id]) return usF[id];
+  try{
+    const [mR, pR, eR] = await Promise.all([
+      fetch(`https://finnhub.io/api/v1/stock/metric?symbol=${id}&metric=all&token=${key}`),
+      fetch(`https://finnhub.io/api/v1/stock/profile2?symbol=${id}&token=${key}`),
+      fetch(`https://finnhub.io/api/v1/stock/earnings?symbol=${id}&limit=8&token=${key}`),
+    ]);
+    const m=await mR.json(), p=await pR.json(), e=await eR.json();
+    const mt = m.metric || {};
+
+    // Finnhub ROE/ROA 是小數（e.g. 0.28 = 28%），需 *100
+    const toP = v => v!=null ? +(v*100).toFixed(2) : null;
+
+    // EPS 歷史（quarterly earnings）
+    const epsHistory = (e||[]).slice().reverse().map(x=>({q:x.period, v:x.actual})).filter(x=>x.v!=null);
+
+    // 毛利率歷史 Finnhub free tier 沒有 quarterly grossMargin，只有 TTM
+    const gmHistory = [];
+
+    const result = {
+      eps:  mt.epsBasicExclExtraItemsTTM || mt.epsDilutedTTM || null,
+      pe:   mt.peBasicExclExtraTTM || mt.peTTM || null,
+      roe:  toP(mt.roeTTM),
+      roa:  toP(mt.roaTTM),
+      grossMargin: mt.grossMarginTTM!=null ? +(mt.grossMarginTTM*100).toFixed(2) : null,
+      mktCap: p.marketCapitalization || null,
+      industry: p.finnhubIndustry || null,
+      name: p.name || id,
+      epsHistory,
+      gmHistory,
+      epsEstimate: mt.epsNormalizedAnnual || null,
+    };
+    usF[id] = result;
+    return result;
+  }catch(e){ return null; }
+}
+
+// ══════════════════════════════════════════
+//  美股新聞
+// ══════════════════════════════════════════
+async function fetchNews(key, id){
+  if(newsC[id]) return newsC[id];
+  try{
+    const r = await fetch(`https://finnhub.io/api/v1/company-news?symbol=${id}&from=${dAgo(7)}&to=${dAgo(0)}&token=${key}`);
+    const j = await r.json();
+    newsC[id] = (j||[]).slice(0,3).map(n=>({h:n.headline,u:n.url}));
+    return newsC[id];
+  }catch(e){ return []; }
+}
+
+// ══════════════════════════════════════════
+//  Chart.js
 // ══════════════════════════════════════════
 const chartInst = {};
 function drawChart(id, labels, data, label, color){
   const ctx = document.getElementById(id);
-  if(!ctx) return;
+  if(!ctx || !labels.length) return;
   if(chartInst[id]) chartInst[id].destroy();
   chartInst[id] = new Chart(ctx, {
     type:'line',
     data:{ labels, datasets:[{
-      label, data, borderColor:color, backgroundColor:color+'22',
+      label, data, borderColor:color, backgroundColor:color+'20',
       tension:.35, fill:true, pointRadius:3, pointBackgroundColor:color, borderWidth:2
     }]},
     options:{
@@ -558,34 +590,41 @@ function drawChart(id, labels, data, label, color){
 }
 
 // ══════════════════════════════════════════
-//  Render tables
+//  Render TW — 欄位與 US 對齊
 // ══════════════════════════════════════════
 function renderTW(){
   const tbody = document.getElementById('twBody');
   let rows='', cost=0, pv=0;
   TW_PORT.forEach(s => {
-    const p = twPx[s.id], val = p!=null ? p*s.shares : null;
-    const pnl = val!=null ? val-s.totalCost : null;
+    const p = twPx[s.id];
+    const val = p!=null ? p*s.shares : null;
+    const pnl = val!=null ? val - s.totalCost : null;
     const pct = pnl!=null ? (pnl/s.totalCost)*100 : null;
-    cost += s.totalCost; if(val) pv += val;
+    cost += s.totalCost;
+    if(val) pv += val;
     const f = twF[s.id] || {};
-    const mc = f.mktCap ? fN(f.mktCap/1e8,0)+'億' : '—';
     rows += `
       <tr onclick="toggleDet('tw','${s.id}')">
         <td><div class="tn twc">${s.id}</div><div class="ts">${s.name}</div></td>
         <td>${fN(s.shares)}</td>
-        <td>${fN(s.avgCost,1)}</td>
-        <td id="twp-${s.id}">${p!=null?fN(p,2):'<span class="na">…</span>'}</td>
+        <td>${fN(s.avgCost,2)}</td>
+        <td>${p!=null?fN(p,2):'<span class="na">—</span>'}</td>
         <td>${fN(s.totalCost)}</td>
         <td>${val!=null?fN(val):'—'}</td>
         <td class="${cls(pnl)}">${pnl!=null?(pnl>0?'+':'')+fN(pnl):'—'}</td>
         <td>${pct!=null?pb(pct):'—'}</td>
-        <td>${fF(f.eps,s.isETF)}</td><td>${fF(f.pe,s.isETF,'x')}</td>
-        <td>${fF(f.roe,s.isETF,'%')}</td><td>${fF(f.roa,s.isETF,'%')}</td>
-        <td>${fF(f.grossMargin,s.isETF,'%')}</td><td>${s.isETF?naEl():mc}</td>
+        <td>${fF(f.eps,s.isETF)}</td>
+        <td>${fF(f.pe,s.isETF,'x')}</td>
+        <td>${fF(f.roe,s.isETF,'%')}</td>
+        <td>${fF(f.roa,s.isETF,'%')}</td>
+        <td>${fF(f.grossMargin,s.isETF,'%')}</td>
+        <td>${s.isETF?naEl():(f.mktCap?fN(f.mktCap/1e8,0):'—')}</td>
       </tr>
       <tr class="drow" id="drow-tw-${s.id}">
-        <td colspan="14"><div id="dc-tw-${s.id}"><span class="na">點擊展開詳情</span></div></td>
+        <td colspan="14">
+          <div id="dc-tw-${s.id}"><span class="na">點擊展開詳情</span></div>
+          <div class="debug-box" id="dbgFS-${s.id}"></div>
+        </td>
       </tr>`;
   });
   tbody.innerHTML = rows;
@@ -593,29 +632,40 @@ function renderTW(){
   document.getElementById('twMeta').textContent=`成本 ${fN(cost)} ｜ 損益 ${pnl>0?'+':''}${fN(pnl)} (${fP(pct)})`;
 }
 
+// ══════════════════════════════════════════
+//  Render US — 報酬率用 totalCostTWD 計算
+// ══════════════════════════════════════════
 function renderUS(){
   const tbody = document.getElementById('usBody');
   let rows='', cost=0, pv=0;
   US_PORT.forEach(s => {
-    const p = usPx[s.id], val = p!=null ? p*s.shares*USD_TWD : null;
-    const pnl = val!=null ? val-s.totalCostTWD : null;
-    const pct = pnl!=null ? (pnl/s.totalCostTWD)*100 : null;
-    cost += s.totalCostTWD; if(val) pv += val;
+    const p = usPx[s.id];
+    // 現值TWD = 現價USD × 股數 × 匯率
+    const val = p!=null ? p * s.shares * USD_TWD : null;
+    // 損益TWD = 現值 − 成本TWD
+    const pnl = val!=null ? val - s.totalCostTWD : null;
+    // 報酬率 = 損益 / 成本TWD
+    const pct = pnl!=null ? (pnl / s.totalCostTWD) * 100 : null;
+    cost += s.totalCostTWD;
+    if(val) pv += val;
     const f = usF[s.id] || {};
-    const mc = f.mktCap ? '$'+fN(f.mktCap/1000,1)+'B' : '—';
+    const mc = f.mktCap ? fN(f.mktCap/1000,1) : '—';
     rows += `
       <tr onclick="toggleDet('us','${s.id}')">
         <td><div class="tn usc">${s.id}</div><div class="ts">${s.name}</div></td>
         <td>${s.shares}</td>
         <td>$${fN(s.avgCostUSD,2)}</td>
-        <td id="usp-${s.id}">${p!=null?'$'+fN(p,2):'<span class="na">…</span>'}</td>
+        <td>${p!=null?'$'+fN(p,2):'<span class="na">—</span>'}</td>
         <td>${fN(s.totalCostTWD)}</td>
         <td>${val!=null?fN(val):'—'}</td>
         <td class="${cls(pnl)}">${pnl!=null?(pnl>0?'+':'')+fN(pnl):'—'}</td>
         <td>${pct!=null?pb(pct):'—'}</td>
-        <td>${fF(f.eps,s.isETF)}</td><td>${fF(f.pe,s.isETF,'x')}</td>
-        <td>${fF(f.roe,s.isETF,'%')}</td><td>${fF(f.roa,s.isETF,'%')}</td>
-        <td>${fF(f.grossMargin,s.isETF,'%')}</td><td>${s.isETF?naEl():mc}</td>
+        <td>${fF(f.eps,s.isETF)}</td>
+        <td>${fF(f.pe,s.isETF,'x')}</td>
+        <td>${fF(f.roe,s.isETF,'%')}</td>
+        <td>${fF(f.roa,s.isETF,'%')}</td>
+        <td>${fF(f.grossMargin,s.isETF,'%')}</td>
+        <td>${s.isETF?naEl():mc}</td>
       </tr>
       <tr class="drow" id="drow-us-${s.id}">
         <td colspan="14"><div id="dc-us-${s.id}"><span class="na">點擊展開詳情</span></div></td>
@@ -628,9 +678,9 @@ function renderUS(){
 
 function updateSummary(){
   let cost=0, pv=0;
-  TW_PORT.forEach(s=>{cost+=s.totalCost;if(twPx[s.id])pv+=twPx[s.id]*s.shares});
-  US_PORT.forEach(s=>{cost+=s.totalCostTWD;if(usPx[s.id])pv+=usPx[s.id]*s.shares*USD_TWD});
-  cost+=15000; pv+=17659; // 基金
+  TW_PORT.forEach(s=>{cost+=s.totalCost; if(twPx[s.id]) pv+=twPx[s.id]*s.shares});
+  US_PORT.forEach(s=>{cost+=s.totalCostTWD; if(usPx[s.id]) pv+=usPx[s.id]*s.shares*USD_TWD});
+  cost+=15000; pv+=17659; // 宇聯基金
   const pnl=pv-cost, pct=(pnl/cost)*100;
   document.getElementById('sTotalCost').textContent=fN(cost);
   document.getElementById('sTotalPV').textContent=fN(pv);
@@ -644,59 +694,62 @@ function updateSummary(){
 //  Detail panel
 // ══════════════════════════════════════════
 async function toggleDet(mkt, id){
-  const rowId = `drow-${mkt}-${id}`;
-  const row = document.getElementById(rowId);
+  const row = document.getElementById(`drow-${mkt}-${id}`);
   if(!row) return;
   if(row.classList.contains('open')){ row.classList.remove('open'); return; }
   row.classList.add('open');
   const el = document.getElementById(`dc-${mkt}-${id}`);
   el.innerHTML = `<span class="na dot">載入中</span>`;
-  const key   = document.getElementById('fhKey').value.trim();
-  const token = document.getElementById('fmToken').value.trim();
+  const key=document.getElementById('fhKey').value.trim();
+  const token=document.getElementById('fmToken').value.trim();
   let f=null, news=[];
-  try{
-    if(mkt==='tw'){
-      f = await fetchTWFund(token, id);
-      twF[id]=f||{}; renderTW();
-    } else {
-      [f,news] = await Promise.all([fetchUSFund(key,id), fetchNews(key,id)]);
-      usF[id]=f||{}; renderUS();
-    }
-    document.getElementById(rowId).classList.add('open');
-    updateSummary();
-  }catch(e){}
+  if(mkt==='tw'){
+    f = await fetchTWFund(token, id);
+    twF[id]=f||{}; renderTW();
+    document.getElementById(`drow-tw-${id}`)?.classList.add('open');
+  } else {
+    [f,news] = await Promise.all([fetchUSFund(key,id), fetchNews(key,id)]);
+    usF[id]=f||{}; renderUS();
+    document.getElementById(`drow-us-${id}`)?.classList.add('open');
+  }
+  updateSummary();
   const fi = f||{};
   const isETF = (mkt==='tw'?TW_PORT:US_PORT).find(x=>x.id===id)?.isETF;
-  const chips = isETF ? `<div class="chip"><div class="chip-k">類型</div><div class="chip-v et">ETF 不適用</div></div>` :
-    [
-      {k:'EPS TTM',  v:fi.eps!=null?fN(fi.eps,2):'—',         c:fi.eps>0?'gd':''},
-      {k:'P/E',      v:fi.pe!=null?fN(fi.pe,1)+'x':'—',       c:''},
-      {k:'ROE %',    v:fi.roe!=null?fi.roe+'%':'—',            c:fi.roe>15?'gd':''},
-      {k:'ROA %',    v:fi.roa!=null?fi.roa+'%':'—',            c:fi.roa>5?'gd':''},
-      {k:'毛利率',   v:fi.grossMargin!=null?fi.grossMargin+'%':'—', c:fi.grossMargin>40?'gd':fi.grossMargin>20?'':'bd'},
-      {k:'市值',     v:mkt==='us'&&fi.mktCap?'$'+fN(fi.mktCap/1000,1)+'B':fi.mktCap?fN(fi.mktCap/1e8,0)+'億':'—', c:''},
-      {k:'今年EPS估',v:fi.epsEstimate!=null?fN(fi.epsEstimate,2):'—', c:''},
-    ].map(c=>`<div class="chip"><div class="chip-k">${c.k}</div><div class="chip-v ${c.c}">${c.v}</div></div>`).join('');
+  const chips = isETF
+    ? `<div class="chip"><div class="chip-k">類型</div><div class="chip-v et">ETF</div></div>`
+    : [
+        {k:'EPS TTM',  v:fi.eps!=null?fN(fi.eps,2):'—',            c:fi.eps>0?'gd':''},
+        {k:'P/E',      v:fi.pe!=null?fN(fi.pe,1)+'x':'—',          c:(fi.pe>0&&fi.pe<35)?'gd':''},
+        {k:'ROE %',    v:fi.roe!=null?fi.roe+'%':'—',               c:fi.roe>15?'gd':''},
+        {k:'ROA %',    v:fi.roa!=null?fi.roa+'%':'—',               c:fi.roa>5?'gd':''},
+        {k:'毛利率',   v:fi.grossMargin!=null?fi.grossMargin+'%':'—',c:fi.grossMargin>40?'gd':fi.grossMargin>20?'':'bd'},
+        {k:'市值',     v:mkt==='us'&&fi.mktCap?'$'+fN(fi.mktCap/1000,1)+'B':fi.mktCap?fN(fi.mktCap/1e8,0)+'億':'—',c:''},
+        {k:'今年EPS估',v:fi.epsEstimate!=null?fN(fi.epsEstimate,2):'—',c:''},
+      ].map(c=>`<div class="chip"><div class="chip-k">${c.k}</div><div class="chip-v ${c.c}">${c.v}</div></div>`).join('');
 
   const newsHtml = news.map(n=>`<div class="news-item"><a href="${n.u}" target="_blank">${n.h}</a></div>`).join('');
   el.innerHTML = `
     <div class="dpanel">
       <div>
         <div class="chips">${chips}</div>
-        ${!isETF?`<div class="chart-row">
+        ${!isETF && (fi.epsHistory?.length || fi.gmHistory?.length) ? `
+        <div class="chart-row" style="margin-top:8px">
           <div class="chart-box"><h5>每季 EPS</h5><canvas id="eps-${mkt}-${id}"></canvas></div>
           <div class="chart-box"><h5>毛利率趨勢%</h5><canvas id="gm-${mkt}-${id}"></canvas></div>
-        </div>`:''}
+        </div>` : !isETF ? '<div style="font-size:.6rem;color:var(--mu);margin-top:8px">⚠ 尚無季財報資料（或需展開後才能載入）</div>' : ''}
       </div>
       <div class="det-right">
-        <h4>${id} ${fi.name||''}</h4>
+        <h4>${id}${fi.name&&fi.name!==id?' · '+fi.name:''}</h4>
         ${mkt==='us'&&fi.industry?`<p style="font-size:.6rem;color:var(--mu);margin-bottom:5px">📂 ${fi.industry}</p>`:''}
-        ${newsHtml?`<div class="news-list">${newsHtml}</div>`:''}
+        ${isETF?'<p style="font-size:.65rem;color:var(--mu)">ETF 不適用個股財務指標</p>':''}
+        ${newsHtml?`<div class="news-list" style="margin-top:6px">${newsHtml}</div>`:''}
       </div>
     </div>`;
   if(!isETF){
-    drawChart(`eps-${mkt}-${id}`, fi.epsHistory?.map(x=>x.q)||[], fi.epsHistory?.map(x=>x.v)||[], 'EPS','#38bdf8');
-    drawChart(`gm-${mkt}-${id}`,  fi.gmHistory?.map(x=>x.q)||[],  fi.gmHistory?.map(x=>x.v)||[],  '毛利率%','#34d399');
+    if(fi.epsHistory?.length)
+      drawChart(`eps-${mkt}-${id}`, fi.epsHistory.map(x=>x.q), fi.epsHistory.map(x=>x.v), 'EPS','#38bdf8');
+    if(fi.gmHistory?.length)
+      drawChart(`gm-${mkt}-${id}`, fi.gmHistory.map(x=>x.q), fi.gmHistory.map(x=>x.v), '毛利率%','#34d399');
   }
 }
 
@@ -704,22 +757,24 @@ async function toggleDet(mkt, id){
 //  Main load
 // ══════════════════════════════════════════
 async function loadAll(){
-  const key   = document.getElementById('fhKey').value.trim();
-  const token = document.getElementById('fmToken').value.trim();
-  if(!key && !token){ setStatus('請輸入至少一組 API 金鑰','err'); return; }
+  const key=document.getElementById('fhKey').value.trim();
+  const token=document.getElementById('fmToken').value.trim();
+  if(!key&&!token){ setStatus('請輸入至少一組 API 金鑰','err'); return; }
   document.getElementById('fetchBtn').disabled=true;
   document.getElementById('ri').classList.add('spin');
   setStatus('連接數據源中…','loading');
   renderTW(); renderUS(); updateSummary();
-  const tasks = [];
+  const tasks=[];
   if(token) tasks.push(fetchTWPrices(token).then(p=>{ twPx=p; }));
   if(key)   tasks.push(fetchUSPrices(key).then(p=>{ usPx=p; }));
+  // 預載美股非ETF基本面
   if(key)   US_PORT.filter(s=>!s.isETF).forEach(s=>tasks.push(fetchUSFund(key,s.id).then(f=>{if(f)usF[s.id]=f})));
   await Promise.allSettled(tasks);
   renderTW(); renderUS(); updateSummary();
-  const now = new Date();
+  const now=new Date();
   document.getElementById('lastUpd').textContent=`最後更新：${now.toLocaleTimeString('zh-TW')}`;
-  setStatus(`✓ 更新完成 ${now.toLocaleTimeString('zh-TW')}（台股報價=最近收盤價）`,'ok');
+  const pxCount = Object.keys(twPx).length + Object.keys(usPx).length;
+  setStatus(`✓ 完成 ${now.toLocaleTimeString('zh-TW')} — 取得 ${pxCount} 筆報價（台股=最新收盤，ETF=盤中快照）`, 'ok');
   document.getElementById('fetchBtn').disabled=false;
   document.getElementById('ri').classList.remove('spin');
 }
@@ -728,39 +783,41 @@ async function loadAll(){
 //  Portfolio Editor
 // ══════════════════════════════════════════
 function renderEditor(){
-  ['tw','us'].forEach(m => {
-    const port = m==='tw' ? TW_PORT : US_PORT;
-    const el = document.getElementById(`${m}EditList`);
-    el.innerHTML = port.map((s,i) => `
+  ['tw','us'].forEach(m=>{
+    const port = m==='tw'?TW_PORT:US_PORT;
+    document.getElementById(`${m}EditList`).innerHTML = port.map((s,i)=>`
       <div class="edit-row">
         <input value="${s.id}" placeholder="代號" id="e-id-${m}-${i}"/>
         <input value="${s.name}" placeholder="名稱" id="e-name-${m}-${i}"/>
         <input value="${s.shares}" type="number" id="e-shares-${m}-${i}"/>
-        <input value="${m==='tw'?s.avgCost:s.avgCostUSD}" type="number" id="e-avg-${m}-${i}"/>
+        <input value="${m==='tw'?s.avgCost:s.avgCostUSD}" type="number" step="0.001" id="e-avg-${m}-${i}"/>
         <input value="${m==='tw'?s.totalCost:s.totalCostTWD}" type="number" id="e-cost-${m}-${i}"/>
         <div style="display:flex;align-items:center;gap:4px;justify-content:center">
           <input type="checkbox" class="etf-chk" id="e-etf-${m}-${i}" ${s.isETF?'checked':''}/>
-          <label for="e-etf-${m}-${i}" style="font-size:.58rem;color:var(--mu)">ETF</label>
+          <label for="e-etf-${m}-${i}" style="font-size:.57rem;color:var(--mu)">ETF</label>
         </div>
         <button class="del-btn" onclick="delRow('${m}',${i})">✕</button>
       </div>`).join('');
   });
 }
-function addTWRow(){ TW_PORT.push({id:'',name:'',shares:0,avgCost:0,totalCost:0,isETF:false}); renderEditor(); }
-function addUSRow(){ US_PORT.push({id:'',name:'',shares:0,avgCostUSD:0,totalCostTWD:0,isETF:false}); renderEditor(); }
+function addRow(m){
+  if(m==='tw') TW_PORT.push({id:'',name:'',shares:0,avgCost:0,totalCost:0,isETF:false});
+  else US_PORT.push({id:'',name:'',shares:0,avgCostUSD:0,totalCostTWD:0,isETF:false});
+  renderEditor();
+}
 function delRow(m,i){ if(m==='tw') TW_PORT.splice(i,1); else US_PORT.splice(i,1); renderEditor(); }
 function savePortfolio(){
   TW_PORT = TW_PORT.map((_,i)=>({
-    id:   document.getElementById(`e-id-tw-${i}`).value.trim(),
-    name: document.getElementById(`e-name-tw-${i}`).value.trim(),
+    id:document.getElementById(`e-id-tw-${i}`).value.trim(),
+    name:document.getElementById(`e-name-tw-${i}`).value.trim(),
     shares:+document.getElementById(`e-shares-tw-${i}`).value,
     avgCost:+document.getElementById(`e-avg-tw-${i}`).value,
     totalCost:+document.getElementById(`e-cost-tw-${i}`).value,
     isETF:document.getElementById(`e-etf-tw-${i}`).checked
   })).filter(s=>s.id);
   US_PORT = US_PORT.map((_,i)=>({
-    id:   document.getElementById(`e-id-us-${i}`).value.trim(),
-    name: document.getElementById(`e-name-us-${i}`).value.trim(),
+    id:document.getElementById(`e-id-us-${i}`).value.trim(),
+    name:document.getElementById(`e-name-us-${i}`).value.trim(),
     shares:+document.getElementById(`e-shares-us-${i}`).value,
     avgCostUSD:+document.getElementById(`e-avg-us-${i}`).value,
     totalCostTWD:+document.getElementById(`e-cost-us-${i}`).value,
@@ -768,92 +825,91 @@ function savePortfolio(){
   })).filter(s=>s.id);
   twPx={}; usPx={}; twF={}; usF={}; newsC={};
   renderTW(); renderUS(); updateSummary(); renderEditor();
-  document.getElementById('saveMsg').textContent='✓ 已儲存，請切換到投資組合頁更新報價';
-  setTimeout(()=>document.getElementById('saveMsg').textContent='', 3000);
+  document.getElementById('saveMsg').textContent='✓ 已儲存，請切換到投資組合頁重新載入';
+  setTimeout(()=>document.getElementById('saveMsg').textContent='',3000);
 }
 
 // ══════════════════════════════════════════
 //  Search
 // ══════════════════════════════════════════
 let searchMkt='TW';
-function setSearchMkt(m){
+function setMkt(m){
   searchMkt=m;
   document.getElementById('sbtw').classList.toggle('on',m==='TW');
   document.getElementById('sbus').classList.toggle('on',m==='US');
 }
 async function doSearch(){
-  const sym = document.getElementById('searchInput').value.trim().toUpperCase();
+  const sym=document.getElementById('searchInput').value.trim().toUpperCase();
   if(!sym) return;
-  const key   = document.getElementById('fhKey').value.trim();
-  const token = document.getElementById('fmToken').value.trim();
-  const el = document.getElementById('searchResult');
+  const key=document.getElementById('fhKey').value.trim();
+  const token=document.getElementById('fmToken').value.trim();
+  const el=document.getElementById('searchResult');
   el.innerHTML=`<div style="padding:20px;text-align:center;color:var(--mu)"><span class="dot">查詢中</span></div>`;
   try{
     if(searchMkt==='US'){
-      if(!key){ el.innerHTML=`<div style="color:var(--r);padding:14px">請先輸入 Finnhub API Key</div>`; return; }
-      const [qR,mR,pR,nR,eR] = await Promise.all([
+      if(!key){el.innerHTML=`<div style="color:var(--r);padding:12px">請先輸入 Finnhub Key</div>`;return;}
+      const [qR,mR,pR,nR,eR]=await Promise.all([
         fetch(`https://finnhub.io/api/v1/quote?symbol=${sym}&token=${key}`),
         fetch(`https://finnhub.io/api/v1/stock/metric?symbol=${sym}&metric=all&token=${key}`),
         fetch(`https://finnhub.io/api/v1/stock/profile2?symbol=${sym}&token=${key}`),
-        fetch(`https://finnhub.io/api/v1/company-news?symbol=${sym}&from=${daysAgo(7)}&to=${daysAgo(0)}&token=${key}`),
+        fetch(`https://finnhub.io/api/v1/company-news?symbol=${sym}&from=${dAgo(7)}&to=${dAgo(0)}&token=${key}`),
         fetch(`https://finnhub.io/api/v1/stock/earnings?symbol=${sym}&limit=8&token=${key}`),
       ]);
       const q=await qR.json(), mt=(await mR.json()).metric||{}, pr=await pR.json(), news=await nR.json(), earn=await eR.json();
+      const toP=v=>v!=null?+(v*100).toFixed(2):null;
       renderSR(sym, pr.name||sym, q.c, q.dp,
-        mt.epsBasicExclExtraItemsTTM||mt.epsDilutedTTM,
-        mt.peBasicExclExtraTTM||mt.peTTM,
-        mt.roeTTM!=null?+(mt.roeTTM*100).toFixed(2):null,
-        mt.roaTTM!=null?+(mt.roaTTM*100).toFixed(2):null,
+        mt.epsBasicExclExtraItemsTTM||mt.epsDilutedTTM, mt.peBasicExclExtraTTM||mt.peTTM,
+        toP(mt.roeTTM), toP(mt.roaTTM),
         mt.grossMarginTTM!=null?+(mt.grossMarginTTM*100).toFixed(2):null,
         pr.marketCapitalization, news,
-        (earn||[]).slice().reverse().map(x=>({q:x.period,v:x.actual})), [], 'US', pr.finnhubIndustry);
+        (earn||[]).slice().reverse().map(x=>({q:x.period,v:x.actual})).filter(x=>x.v!=null),
+        [], 'US', pr.finnhubIndustry);
     } else {
-      if(!token){ el.innerHTML=`<div style="color:var(--r);padding:14px">請先輸入 FinMind Token</div>`; return; }
-      const [prJ,fsJ,perJ] = await Promise.all([
-        fmFetch('TaiwanStockPrice', sym, daysAgo(10), daysAgo(0), token),
-        fmFetch('TaiwanStockFinancialStatements', sym, daysAgo(365*3), null, token),
-        fmFetch('TaiwanStockPER', sym, daysAgo(60), null, token),
+      if(!token){el.innerHTML=`<div style="color:var(--r);padding:12px">請先輸入 FinMind Token</div>`;return;}
+      const [prD, fsD, perD] = await Promise.all([
+        fmGet('TaiwanStockPrice', sym, dAgo(14), dAgo(0), token),
+        fmGet('TaiwanStockFinancialStatements', sym, dAgo(365*3), null, token),
+        fmGet('TaiwanStockPER', sym, dAgo(90), null, token),
       ]);
-      const prD=prJ.data||[], fsD=fsJ.data||[], perD=perJ.data||[];
-      const price = prD.length ? parseFloat(prD[prD.length-1].close) : null;
-      const prev  = prD.length>1 ? parseFloat(prD[prD.length-2].close) : null;
-      const pct   = price&&prev ? ((price-prev)/prev*100) : null;
-
-      const findVal=(types)=>{for(const t of types){const r=fsD.filter(x=>x.type===t);if(r.length)return parseFloat(r[r.length-1].value);}return null;};
-      const eps = findVal(['基本每股盈餘','每股盈餘(元)','EPS']);
-      const roe = findVal(['股東權益報酬率','ROE']);
-      const roa = findVal(['資產報酬率','ROA']);
-      const gpR = fsD.filter(x=>['毛利（損）','毛利','GrossProfit'].includes(x.type)).slice(-8);
-      const rvR = fsD.filter(x=>['營業收入合計','營收','Revenue'].includes(x.type)).slice(-8);
-      const gm  = gpR.length&&rvR.length ? +(parseFloat(gpR[gpR.length-1].value)/parseFloat(rvR[rvR.length-1].value)*100).toFixed(2) : null;
-      const pe  = perD.length ? parseFloat(perD[perD.length-1].PER) : null;
-      const epsH = fsD.filter(x=>['基本每股盈餘','每股盈餘(元)'].includes(x.type)).slice(-8).map(x=>({q:x.date.slice(0,7),v:parseFloat(x.value)}));
-      const gmH  = gpR.map((g,i)=>{const rv=rvR[i];return rv?{q:g.date.slice(0,7),v:+(parseFloat(g.value)/parseFloat(rv.value)*100).toFixed(2)}:null}).filter(Boolean);
-      renderSR(sym,sym,price,pct,eps,pe,roe,roa,gm,null,[],epsH,gmH,'TW',null);
+      const price=prD.length?parseFloat(prD[prD.length-1].close):null;
+      const prev=prD.length>1?parseFloat(prD[prD.length-2].close):null;
+      const pct=price&&prev?((price-prev)/prev*100):null;
+      const pickLast=(...cs)=>{for(const c of cs){const r=fsD.filter(x=>x.type===c||x.origin_name===c);if(r.length)return parseFloat(r[r.length-1].value);}return null;};
+      const eps=pickLast('EPS','BasicEPS','基本每股盈餘','每股盈餘(元)');
+      const roe=pickLast('ROE','ReturnOnEquity','股東權益報酬率');
+      const roa=pickLast('ROA','ReturnOnAssets','資產報酬率');
+      const sort=arr=>[...arr].sort((a,b)=>a.date.localeCompare(b.date));
+      const gpR=sort(fsD.filter(x=>['GrossProfit','毛利（損）','毛利'].includes(x.type))).slice(-8);
+      const rvR=sort(fsD.filter(x=>['Revenue','OperatingRevenue','營業收入合計'].includes(x.type))).slice(-8);
+      const gm=gpR.length&&rvR.length?+(parseFloat(gpR[gpR.length-1].value)/parseFloat(rvR[rvR.length-1].value)*100).toFixed(2):null;
+      const pe=perD.length?parseFloat(perD[perD.length-1].PER):null;
+      const epsH=sort(fsD.filter(x=>['EPS','BasicEPS','基本每股盈餘','每股盈餘(元)'].includes(x.type))).slice(-8).map(x=>({q:x.date.slice(0,7),v:parseFloat(x.value)}));
+      const gmH=gpR.map((g,i)=>{const rv=rvR[i];return rv?{q:g.date.slice(0,7),v:+(parseFloat(g.value)/parseFloat(rv.value)*100).toFixed(2)}:null}).filter(Boolean);
+      renderSR(sym, sym, price, pct, eps, pe, roe, roa, gm, null, [], epsH, gmH, 'TW', null);
     }
   }catch(err){
-    el.innerHTML=`<div style="color:var(--r);padding:14px">查詢失敗：${err.message}</div>`;
+    el.innerHTML=`<div style="color:var(--r);padding:12px">查詢失敗：${err.message}</div>`;
   }
 }
 
 function renderSR(id,name,price,pct,eps,pe,roe,roa,gm,mc,news,epsH,gmH,mkt,ind){
-  const mcFmt = mc!=null ? (mkt==='US'?'$'+fN(mc/1000,1)+'B':fN(mc/1e8,1)+'億') : '—';
+  const mcFmt=mc!=null?(mkt==='US'?'$'+fN(mc/1000,1)+'B':fN(mc/1e8,1)+'億'):'—';
   const chips=[
     {k:'EPS',v:eps!=null?fN(eps,2):'—',c:eps>0?'gd':''},
-    {k:'P/E',v:pe!=null?fN(pe,1)+'x':'—',c:''},
+    {k:'P/E',v:pe!=null?fN(pe,1)+'x':'—',c:(pe>0&&pe<35)?'gd':''},
     {k:'ROE%',v:roe!=null?roe+'%':'—',c:roe>15?'gd':''},
     {k:'ROA%',v:roa!=null?roa+'%':'—',c:roa>5?'gd':''},
     {k:'毛利率',v:gm!=null?gm+'%':'—',c:gm>40?'gd':gm>20?'':'bd'},
     {k:'市值',v:mcFmt,c:''},
   ].map(c=>`<div class="chip"><div class="chip-k">${c.k}</div><div class="chip-v ${c.c}">${c.v}</div></div>`).join('');
-  const newsHtml = news.slice(0,3).map(n=>`<div class="news-item"><a href="${n.url||n.u}" target="_blank">${n.headline||n.h}</a></div>`).join('');
+  const newsHtml=news.slice(0,3).map(n=>`<div class="news-item"><a href="${n.url||n.u}" target="_blank">${n.headline||n.h}</a></div>`).join('');
   document.getElementById('searchResult').innerHTML=`
     <div class="sr-box">
       <div class="sr-hdr">
         <div><div class="sr-ticker">${id} ${mkt==='US'?'🇺🇸':'🇹🇼'}</div><div class="sr-name">${name}${ind?' · '+ind:''}</div></div>
         <div style="text-align:right">
           <div class="sr-price ${cls(pct)}">${price!=null?(mkt==='US'?'$':'')+fN(price,2):'—'}</div>
-          <div style="font-size:.68rem">${pct!=null?pb(pct):'—'} 日變動</div>
+          <div style="font-size:.66rem">${pct!=null?pb(pct):'—'} 日變動</div>
         </div>
       </div>
       <div class="sr-chips">${chips}</div>
@@ -861,16 +917,14 @@ function renderSR(id,name,price,pct,eps,pe,roe,roa,gm,mc,news,epsH,gmH,mkt,ind){
         <div class="sr-cbox"><h5>每季 EPS</h5><canvas id="srEps"></canvas></div>
         <div class="sr-cbox"><h5>毛利率趨勢%</h5><canvas id="srGm"></canvas></div>
       </div>
-      ${newsHtml?`<div><p style="font-size:.62rem;color:var(--mu);margin-bottom:6px;text-transform:uppercase;letter-spacing:.8px">最新消息</p><div class="news-list">${newsHtml}</div></div>`:''}
+      ${newsHtml?`<div><p style="font-size:.6rem;color:var(--mu);margin-bottom:5px;text-transform:uppercase;letter-spacing:.8px">最新消息</p><div class="news-list">${newsHtml}</div></div>`:''}
     </div>`;
-  drawChart('srEps', epsH.map(x=>x.q), epsH.map(x=>x.v), 'EPS','#38bdf8');
-  drawChart('srGm',  gmH.map(x=>x.q),  gmH.map(x=>x.v),  '毛利率%','#34d399');
+  if(epsH.length) drawChart('srEps', epsH.map(x=>x.q), epsH.map(x=>x.v), 'EPS','#38bdf8');
+  if(gmH.length)  drawChart('srGm',  gmH.map(x=>x.q),  gmH.map(x=>x.v),  '毛利率%','#34d399');
 }
 
 // ══════════════════════════════════════════
-//  AI Analysis — Claude API
-//  Note: Anthropic API 在瀏覽器端需要 CORS proxy
-//  或在 claude.ai artifact 環境中才能直接呼叫
+//  AI
 // ══════════════════════════════════════════
 let aiMkts=new Set(['TW']), aiFocus=new Set(['portfolio','signal','theme','rec']);
 function toggleMkt(m){ aiMkts.has(m)?aiMkts.delete(m):aiMkts.add(m); document.getElementById(`mbt-${m.toLowerCase()}`).classList.toggle('on',aiMkts.has(m)); }
@@ -885,11 +939,11 @@ async function runAI(){
   const twList=TW_PORT.filter(s=>!s.isETF).map(s=>`${s.id}(${s.name})`).join(', ');
   const usList=US_PORT.filter(s=>!s.isETF).map(s=>s.id).join(', ');
   const incPort=aiFocus.has('portfolio'), incTheme=aiFocus.has('theme'), incRec=aiFocus.has('rec');
-  const prompt=`你是一位專業股市分析師。今天是${new Date().toLocaleDateString('zh-TW')}。請搜尋最新市場資訊，用繁體中文，以 JSON 格式回傳，不要任何其他文字：
+  const prompt=`你是一位專業股市分析師。今天是${new Date().toLocaleDateString('zh-TW')}。請搜尋最新市場資訊後，用繁體中文，以 JSON 格式回傳（不要任何其他文字）：
 {
-  ${incPort?`"portfolioSignals":[{"ticker":"代號","name":"名稱","signal":"觀察進場|持續持有|考慮減碼","signalCode":"buy|hold|sell","reason":"技術+基本面說明","priceAction":"近期價量","targetZone":"目標價區間"}],`:''}
+  ${incPort?`"portfolioSignals":[{"ticker":"代號","name":"名稱","signal":"觀察進場|持續持有|考慮減碼","signalCode":"buy|hold|sell","reason":"技術+基本面說明","priceAction":"近期價量","targetZone":"目標價"}],`:''}
   ${incTheme?`"marketThemes":[{"theme":"題材","description":"說明","momentum":"強|中|弱","relatedStocks":["代號"]}],`:''}
-  ${incRec?`"recommendations":[{"ticker":"代號","name":"名稱","market":"TW|US","reason":"推薦理由（主升段）","catalysts":["觸媒"],"risk":"風險","confidence":"高|中","entryZone":"進場區間"}],`:''}
+  ${incRec?`"recommendations":[{"ticker":"代號","name":"名稱","market":"TW|US","reason":"推薦理由（主升段）","catalysts":["觸媒"],"risk":"風險","confidence":"高|中","entryZone":"進場區"}],`:''}
   "marketSummary":"市場總結"
 }
 分析市場：${[...aiMkts].join(',')}
@@ -897,31 +951,28 @@ ${twList?'台股持股：'+twList:''}
 ${usList?'美股持股：'+usList:''}
 recommendations 推薦 3 支。`;
   try{
-    const r = await fetch('https://api.anthropic.com/v1/messages',{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514', max_tokens:2000,
+        model:'claude-sonnet-4-20250514',max_tokens:2000,
         tools:[{type:'web_search_20250305',name:'web_search'}],
         messages:[{role:'user',content:prompt}]
       })
     });
     if(!r.ok){
-      const errJ = await r.json().catch(()=>({}));
-      throw new Error(errJ.error?.message || `HTTP ${r.status} — 若在 GitHub Pages 上，AI 功能需在 claude.ai 開啟此頁面才能使用`);
+      const e=await r.json().catch(()=>({}));
+      throw new Error(e.error?.message||`HTTP ${r.status}`);
     }
-    const data = await r.json();
-    const txt = data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
-    const m = txt.match(/\{[\s\S]*\}/);
-    if(!m) throw new Error('AI 回傳格式異常，請重試');
-    renderAI(JSON.parse(m[0]), incPort, incTheme, incRec);
+    const data=await r.json();
+    const txt=data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
+    const mm=txt.match(/\{[\s\S]*\}/);
+    if(!mm) throw new Error('AI 回傳格式異常');
+    renderAI(JSON.parse(mm[0]), incPort, incTheme, incRec);
   }catch(e){
-    out.innerHTML=`
-      <div class="cors-note">
-        ⚠️ AI 分析說明：Anthropic API 在 GitHub Pages 上因為安全限制（CORS）無法直接呼叫。<br>
-        <strong>解決方法：</strong>請將這個 HTML 檔案下載到電腦，用 Chrome/Safari 直接開啟（不透過 GitHub Pages），或在 Claude.ai 的 Artifact 中使用。<br><br>
-        錯誤：${e.message}
-      </div>`;
+    out.innerHTML=`<div class="warn-box">❌ AI 分析失敗：${e.message}<br><br>
+      <strong>原因</strong>：從 GitHub Pages 呼叫 Anthropic API 會被瀏覽器 CORS 安全政策阻擋。<br>
+      <strong>解法</strong>：下載此 HTML 到電腦，用 Chrome 或 Safari 直接開啟（file:// 開頭的網址）。</div>`;
   }
   btn.disabled=false;
 }
@@ -937,7 +988,7 @@ function renderAI(ai, incPort, incTheme, incRec){
       html+=`<div class="ai-card"><div class="ai-top">
         <span class="ai-ticker">${s.ticker}</span>
         <span class="ai-sig ${sigMap[s.signalCode]||'sig-h'}">${s.signal||'觀察'}</span>
-        <span style="font-size:.63rem;color:var(--mu);margin-left:auto">${s.name||''}</span>
+        <span style="font-size:.62rem;color:var(--mu);margin-left:auto">${s.name||''}</span>
       </div><p>${s.reason||''}</p>
       <div class="ai-mets">
         ${s.priceAction?`<div class="ai-met">價量 <span>${s.priceAction}</span></div>`:''}
@@ -947,12 +998,12 @@ function renderAI(ai, incPort, incTheme, incRec){
     html+=`</div>`;
   }
   if(incRec&&ai.recommendations?.length){
-    html+=`<div class="ai-sec"><h4>🚀 推薦主升段標的</h4>`;
+    html+=`<div class="ai-sec"><h4>🚀 主升段推薦</h4>`;
     ai.recommendations.forEach((s,i)=>{
       html+=`<div class="ai-card"><div class="ai-top">
         <span class="ai-ticker">#${i+1} ${s.ticker}</span>
         <span class="ai-sig sig-b">${s.confidence||'中'}信心</span>
-        <span style="font-size:.63rem;color:var(--mu);margin-left:auto">${s.name||''} · ${s.market||''}</span>
+        <span style="font-size:.62rem;color:var(--mu);margin-left:auto">${s.name||''} · ${s.market||''}</span>
       </div><p>${s.reason||''}</p>
       <div class="ai-mets">
         ${(s.catalysts||[]).map(c=>`<div class="ai-met">觸媒 <span>${c}</span></div>`).join('')}
@@ -967,9 +1018,9 @@ function renderAI(ai, incPort, incTheme, incRec){
     ai.marketThemes.forEach(t=>{
       const mc={'強':'var(--g)','中':'var(--y)','弱':'var(--mu)'}[t.momentum]||'var(--mu)';
       html+=`<div class="theme-item"><strong>${t.theme}</strong>
-        <span style="font-size:.56rem;padding:1px 6px;border-radius:3px;background:${mc}22;color:${mc};margin-left:5px">${t.momentum}</span>
+        <span style="font-size:.55rem;padding:1px 6px;border-radius:3px;background:${mc}22;color:${mc};margin-left:5px">${t.momentum}</span>
         <br><span style="color:var(--mu)">${t.description||''}</span>
-        ${t.relatedStocks?.length?`<br><span style="font-size:.58rem;color:var(--b3)">相關：${t.relatedStocks.join(' · ')}</span>`:''}
+        ${t.relatedStocks?.length?`<br><span style="font-size:.57rem;color:var(--b3)">相關：${t.relatedStocks.join(' · ')}</span>`:''}
       </div>`;
     });
     html+=`</div></div>`;
@@ -978,7 +1029,7 @@ function renderAI(ai, incPort, incTheme, incRec){
 }
 
 // ══════════════════════════════════════════
-//  Tab switch & Init
+//  Tab + Init
 // ══════════════════════════════════════════
 function switchTab(t){
   const tabs=['portfolio','editor','search','ai'];
